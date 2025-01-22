@@ -2,6 +2,7 @@ import pandas
 from sklearn.ensemble import IsolationForest
 from sklearn.impute import KNNImputer
 import math_help_func as math
+import csv
 
 """
 (summary of filtering)
@@ -19,32 +20,9 @@ def alter_groups():
         new_groups = groups.replace("Price", date_group)
 
         with open('Programmed/NVIDIA_STOCK_02.csv', 'w') as new_file:
-            new_file.write(f"Hash Value,{new_groups}\n")
+            new_file.write(f"{new_groups}\n")
             for line in content:
-                new_file(line)
-
-    return f"{new_groups.replace("Date,", "")}\n"
-
-"""
-@TODO: missing values
-"""
-def ridding_missing_values():
-    overall_data = ""
-    blank_filler_algo = KNNImputer(n_neighbors=10, weights="uniform")
-    with open('Programmed/NVIDIA_STOCK_02.csv', 'r') as new_content:
-        for line in new_content:
-            end_of_hash = line.index(",")
-            alter_line = line[end_of_hash+1:]
-            end_of_date = alter_line.index(",")
-            overall_data += alter_line[end_of_date+1:]
-        
-        with open('Programmed/NVIDIA_STOCK_03.csv', 'w') as new_file:
-            new_file.write(overall_data)
-
-    data = pandas.read_csv('Programmed/NVIDIA_STOCK_03.csv')
-    result = blank_filler_algo.fit_transform(data)
-    new_dataframe = pandas.DataFrame(result, columns=data.columns)
-    new_dataframe.to_csv("Programmed/NVIDIA_STOCK_04.csv", index = False)
+                new_file.write(line)
 
 
 """
@@ -60,50 +38,67 @@ def outliers_removed(group, file_path):
     with open(file_path, 'r') as alter_data:
         data_list = alter_data.readlines()
         for index in range(1, len(data_list)):
-            group_data = data_list[index].split(",")[group]
+            group_data = data_list[index].rstrip("\n").split(",")[group]
             all_data.append(float(group_data))
         ordered_data = math.in_ascending_order(all_data)
         if len(ordered_data) % 2 == 0: # even
             index_median = math.median_of_dataset(ordered_data)
-            quart_one = int(index_median/2)
+            quart_one = index_median//2
             quarter_one = ordered_data[quart_one]
             quarter_three = ordered_data[index_median+quart_one]
-            low_bound = math.low_inter_quart_range(quarter_one, quarter_three)
-            high_bound = math.high_inter_quart_range(quarter_one, quarter_three)
+            low_bound = math.low_inter_quart_range(quarter_one, quarter_three,  ordered_data[0])
+            high_bound = math.high_inter_quart_range(quarter_one, quarter_three, ordered_data[len(ordered_data)-1])
         else: # odd
             index_median = math.median_of_dataset(ordered_data)
-            quart_one = int(index_median/2)
+            quart_one = index_median//2
             quarter_one = (ordered_data[quart_one] + ordered_data[quart_one+1])/2
             quarter_three = (ordered_data[index_median+quart_one] + ordered_data[index_median+quart_one+1])/2
-            low_bound = math.low_inter_quart_range(quarter_one, quarter_three)
-            high_bound = math.high_inter_quart_range(quarter_one, quarter_three)
-        return [x for x in ordered_data if x >= low_bound and high_bound >= x]
+            low_bound = math.low_inter_quart_range(quarter_one, quarter_three,  ordered_data[0])
+            high_bound = math.high_inter_quart_range(quarter_one, quarter_three, ordered_data[len(ordered_data)-1])
+        return [x for x in all_data if low_bound <= x <= high_bound]
+
+
+"""
+@TODO: missing values
+"""
+def rid_missing_values(filepath):
+    overall_data = ""
+    blank_filler_algo = KNNImputer(n_neighbors=10, weights="uniform")
+    with open(filepath, 'r') as new_content:
+        for line in new_content:
+            end_of_date = line.index(",")
+            overall_data += line[end_of_date+1:]    
+        with open('Programmed/NVIDIA_STOCK_04.csv', 'w') as new_file:
+            new_file.write(overall_data)
+    
+    data = pandas.read_csv('Programmed/NVIDIA_STOCK_04.csv')
+    result = blank_filler_algo.fit_transform(data)
+    new_dataframe = pandas.DataFrame(result, columns=data.columns)
+    new_dataframe.to_csv("Programmed/NVIDIA_STOCK_04.csv", index = False)
 
 
 def main():
-    new_groups = alter_groups()
-    ridding_missing_values()
-    #TODO after the method works create a loop to call each group here
-    #NOTE get started on the isolation tree
-    #NOTE put hashing here
-    """
-    # index = 0 
-            # hash_algo = 0
-            for line in content:
-                #hash_algo += 2**index
-                new_file(line)
-                #new_file.write(f"{hash_algo},{line}")
-                #index += 1
-    """
-    with open('Programmed/NVIDIA_STOCK_05.csv', 'w') as final_data:
-        print(new_groups.split())
-        for index in range(len(new_groups.split())):
-            adj_price = outliers_removed(index, 'Programmed/NVIDIA_STOCK_04.CSV')
+    alter_groups()
+    with open('Programmed/NVIDIA_STOCK_02.csv', 'r') as data:
+        gathered = {"Date": [],"Adj Close": [],"Close": [],"High": [],"Low": [],"Open": [],"Volume": []}
+        group_list = data.readline().rstrip("\n").split(",")
+        data_list = data.readlines()
+        for index in range(len(group_list)):
+            if index > 0:
+                collected = outliers_removed(index, 'Programmed/NVIDIA_STOCK_02.CSV')
+                gathered[group_list[index]] = collected
+            else:
+                for line in data_list:
+                    data = line.split(",")
+                    gathered["Date"].append(data[0])
         
-        # print(adj_price)
-        # print(close_price)
-        # print(high_price)
-        # print(lose_price)
-        # print(open_price)
-        # print(volume_price)
+        with open("Programmed/NVIDIA_STOCK_03.csv", "w") as final_data:
+            writer = csv.DictWriter(final_data, fieldnames=gathered.keys())
+            writer.writeheader()
+            rows = [dict(zip(gathered, t)) for t in zip(*gathered.values())]
+            writer.writerows(rows)
+    rid_missing_values("Programmed/NVIDIA_STOCK_03.csv")
+
+    #NOTE get started on the isolation tree
+
 main()
