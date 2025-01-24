@@ -10,24 +10,24 @@ data = pandas.read_csv("Programmed/NVIDIA_STOCK_04.csv")
 features = data.copy()
 labels = features.pop('Adj Close')
 features = numpy.array(features)
-test_model = tensorflow.keras.Sequential([
-                                            Dense(64, activation = 'relu'),
-                                            Dense(1)
-])
-test_model.compile(loss = tensorflow.keras.losses.MeanSquaredError(),
-                   optimizer = tensorflow.keras.optimizers.Adam())
-test_model.fit(features, labels, epochs = 20) # minize loss but it works
 noramalize = layers.Normalization()
 noramalize.adapt(features)
+
 norm_model = tensorflow.keras.Sequential([
                                             noramalize,
-                                            layers.Dense(64, activation = 'relu'),
-                                            layers.Dense(1)
+                                            Dense(128, activation='relu'),
+                                            Dropout(0.2),
+                                            Dense(64, activation='relu'),
+                                            Dropout(0.2),
+                                            Dense(32, activation='relu'),
+                                            Dropout(0.2),
+                                            Dense(1)
 ])
+
 norm_model.compile(loss = tensorflow.keras.losses.MeanSquaredError(),
                    optimizer = tensorflow.keras.optimizers.Adam())
-norm_model.fit(features, labels, epochs = 20)
-#NOTE reduce number of loss
+norm_model.fit(features, labels, epochs = 30, batch_size = 40) 
+#NOTE reduce number of loss (lose is around 4%)
 #NOTE make sure its not overfit or under fit
 #NOTE create a personal training method
 #NOTE recreate the class
