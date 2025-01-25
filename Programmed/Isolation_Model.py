@@ -13,21 +13,27 @@ import pandas as pan
 # print(outliers) # 76 datapoints are outliers
 
 class IsolationModel:
-    def __init__(self):
+    def __init__(self, group):
         self._data_used = pan.read_csv("Programmed/NVIDIA_STOCK_03.csv")
-        self._x_value = self._data_used[["Adj Close","Close","High","Low","Open","Volume"]]
+        self._x_value = self._data_used[[group]]
+        # self._x_value = self._data_used[["Adj Close","Close","High","Low","Open","Volume"]]
         self._model_obj = IsolationForest(contamination=0.1)
     
-    def outlier_result(self):
+    def set_x_value(self, single_group):
+        self._x_value = self._data_used[[single_group]] 
+        
+    def outlier_result(self): # fix this 
         self._model_obj.fit(self._x_value) # method
         anomaly_score = self._model_obj.decision_function(self._x_value) # method
         threshold = pan.Series(anomaly_score).quantile(0.05) # method
-        outliers = self._data_used[anomaly_score < threshold] # conclusion method
+        outliers = self._data_used[anomaly_score < threshold][self._x_value.columns] # conclusion method
         return outliers
 
 
 def main():
-    iso = IsolationModel()
+    iso = IsolationModel("Adj Close")
+    print(iso.outlier_result())
+    iso.set_x_value("Close")
     print(iso.outlier_result())
     print("done done")
 main()
