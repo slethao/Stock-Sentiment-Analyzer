@@ -20,7 +20,11 @@ class IsolationModel:
         self._model_obj = IsolationForest(contamination=0.1)
     
     def set_x_value(self, single_group):
-        self._x_value = self._data_used[[single_group]] 
+        all_groups = self._data_used[["Adj Close","Close","High","Low","Open","Volume"]]
+        if single_group in all_groups.columns:
+            self._x_value = self._data_used[[single_group]] 
+        else:
+            print(f"The column ({single_group}) does not exisit in the csv file.")
         
     def outlier_result(self): # fix this 
         self._model_obj.fit(self._x_value) # method
@@ -34,6 +38,8 @@ def main():
     iso = IsolationModel("Adj Close")
     print(iso.outlier_result())
     iso.set_x_value("Close")
+    print(iso.outlier_result())
+    iso.set_x_value("Stock")
     print(iso.outlier_result())
     print("done done")
 main()
