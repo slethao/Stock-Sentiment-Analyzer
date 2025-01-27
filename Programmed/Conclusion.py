@@ -42,8 +42,8 @@ class Conclusion:
         High vol = strong buying or selling pressure
         Low vol = thin liquidity and increased risk
         1) put all ranges into a .csv and calculate the average daily range (done)
-        2) calculate standard deviation (pending)
-        3) set the threshold (wide or narrow range)
+        2) calculate standard deviation (done)
+        3) set the threshold (wide or narrow range) (pending)
         4) current day's range for th
         """
         low_stock_counter = 0
@@ -54,8 +54,10 @@ class Conclusion:
         price_range_data_frame = pandas.DataFrame({"Price Range": all_ranges})
         price_range_data_frame.to_csv("Programmed/ALL_PRICE_RANGES.csv", index = False)
         avg = math.avg_daily_range("Programmed/ALL_PRICE_RANGES.csv")
+        std = math.standard_dev(avg, all_ranges)
+        print(f"std {std}")
         # print(f"Avg price range: {avg}")
-        
+
         # if : # wide compared to the average price range
         #     pass
         # else: # narrow compared to the average price range
