@@ -15,14 +15,20 @@ def main():
     file_six = "Programmed/NVIDIA_STOCK_PREDICT_Volume.csv"
     all_files = [file_one, file_two, file_three, file_four, file_five, file_six]
     all_attributes = ["Adj Close","Close","High","Low","Open","Volume"]
+    file_counter = 0
+
     for attribute in all_attributes:
         # then use the setter
         model_obj.set_group(attribute)
         # build
+        model_obj.build_model()
         # train
+        trained = model_obj.train_model()
+        # evaluate
+        model_obj.evaluate_model(trained) # train model parameter needed
         # predict
-        # write out all the tensor flow models
-    
+        model_obj.predict_model(trained, all_files[file_counter]) # train model and fiel path parameter needed
+        file_counter += 1
     # use the file library to merge the all files
     file.combining_files()
 
