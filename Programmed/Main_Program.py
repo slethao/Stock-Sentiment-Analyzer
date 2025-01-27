@@ -33,6 +33,9 @@ def main():
     file.combining_files()
 
     # then calculate the results in the Conclusion class
+    data_stored = "Programmed/OVERALL_PREDICTION.csv"
+    outcome = conclude.Conclusion(data_stored)
+    
 
 if __name__ == "__main__":
     main()
