@@ -1,4 +1,5 @@
 import pandas
+import csv
 
 def median_of_dataset(data):
     if len(data) % 2 != 0:
@@ -48,10 +49,74 @@ def standard_dev(avg_range, all_range):
     std = (sum/total)**(1/2)
     return std
 
-def wide_threshold(stand_dev):
-    threshold = stand_dev*1.5
+def wide_threshold(stand_dev, avg_range):
+    threshold = avg_range + (stand_dev*1.5)
     return threshold
 
-def narrow_threshold(stand_dev):
-    threshold = stand_dev*1.5*-1
+def narrow_threshold(stand_dev, avg_range):
+    threshold = avg_range - (stand_dev*1.5)
     return threshold
+
+def cal_vol_price_trend(close, vol_col):
+    """
+    VPT Today = VPT Yesterday + (Volume Today * ((Today's Close - Yesterday's Close)/Yesterday's Close)) 
+    Traits:
+        VPT Today = calcualted volume-price trend value for the current day
+        VPT Yesterday = trading volume for the current day
+        Today's Close = closing price of the sercurity for the current day
+        Yesterday's Close = closing price of teh security from the previous day
+        Volume Today = volume column for each row
+    """
+    vpt_array = []
+    vpt_yesterday = 0 # use is similar to a temp variable
+    vol_counter = 0
+    # loop here
+    for index in range(1, len(close)):
+        today_close = close[index]
+        yesterday_close = close[index-1]
+        stock_change = today_close - yesterday_close
+        percent_stock = stock_change/yesterday_close
+        vpt_today = vpt_yesterday + (vol_col[vol_counter] * percent_stock) # per record
+        vpt_array.append(vpt_today)
+        vpt_yesterday = vpt_today
+        vol_counter += 1
+
+    # data frame
+    vpt_dataframe = pandas.DataFrame({"VPT": vpt_array})
+    # csv
+    vpt_dataframe.to_csv("Programmed/VPT_DATA.csv", index = False)
+
+def cal_on_balence_vol(close, vol_col):
+    """
+    Three conditions:
+        Today's Close > Yesterday's Close:  Today = Yesterday + Volume
+        Today's Close < Yesterday's Close:  Today = Yesterday - Volume
+        Today's Close = Yesterday's Close:  Today = Yesterday
+        Traits:
+            Today's OBV = calculated On-Balance Volume value for the current day
+            Yesterday's OBV = calculated On-Balence Volume value from the previous day
+            Today's Volume = total trading volume for the current day
+            Today's Close = closing price of the sercurity for the current day
+            Yesterday's Close = closing price of the security from the previous day
+    """
+    obv_array = []
+    vol_index = 0
+
+    # loop here
+    for index in range(1, len(close)):
+        today = close[index]
+        yesterday = close[index -1]
+        if today > yesterday:
+            obv_today = yesterday + vol_col[vol_index] # per reocrd
+            obv_array.append(obv_today)
+        elif today < yesterday:
+            obv_today = yesterday - vol_col[vol_index] # per  record
+            obv_array.append(obv_today)
+        else:
+            obv_today = yesterday # per record
+            obv_array.append(obv_today)
+        vol_index += 1
+    # put itno a dataframe
+    obv_dataframe = pandas.DataFrame({"OBV": obv_array})
+    # put into a csv
+    obv_dataframe.to_csv("Programmed/OBV_DATA.csv", index = False)
