@@ -86,6 +86,7 @@ def cal_vol_price_trend(close, vol_col):
     # csv
     vpt_dataframe.to_csv("Programmed/VPT_DATA.csv", index = False)
 
+
 def cal_on_balence_vol(close, vol_col):
     """
     Three conditions:
@@ -100,22 +101,22 @@ def cal_on_balence_vol(close, vol_col):
             Yesterday's Close = closing price of the security from the previous day
     """
     obv_array = []
-    vol_index = 0
+    obv_yesterday = 0
 
     # loop here
     for index in range(1, len(close)):
         today = close[index]
         yesterday = close[index -1]
         if today > yesterday:
-            obv_today = yesterday + vol_col[vol_index] # per reocrd
-            obv_array.append(obv_today)
+            obv_today = obv_yesterday + vol_col[index] # per reocrd
+            
         elif today < yesterday:
-            obv_today = yesterday - vol_col[vol_index] # per  record
-            obv_array.append(obv_today)
+            obv_today = obv_yesterday - vol_col[index] # per  record
+            
         else:
-            obv_today = yesterday # per record
-            obv_array.append(obv_today)
-        vol_index += 1
+            obv_today = obv_yesterday # per record
+        obv_array.append(obv_today)
+        obv_yesterday = obv_today
     # put itno a dataframe
     obv_dataframe = pandas.DataFrame({"OBV": obv_array})
     # put into a csv
