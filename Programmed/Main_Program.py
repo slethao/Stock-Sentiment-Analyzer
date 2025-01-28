@@ -35,7 +35,17 @@ def main():
     # then calculate the results in the Conclusion class
     data_stored = "Programmed/OVERALL_PREDICTION.csv"
     outcome = conclude.Conclusion(data_stored)
-    
+    # outcome.price_change() # uncomment later (create a chart to put on tensor board)
+    outcome.price_move()
+    # connect the prediction data to the conclusions made (pending)
+
+    # polarity on the results (pending)
+
+    # store into a database
+
+    #display it on tensor board
+
+    #show how results correlate with the news related to tech
 
 if __name__ == "__main__":
     main()
