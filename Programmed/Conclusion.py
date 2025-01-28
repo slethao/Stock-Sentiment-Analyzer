@@ -18,13 +18,13 @@ class Conclusion:
         yesterday price  = 140
         today price = 200
 
-        (200 - 140)/100 = 0.6 (for the ratio) 
-                        = 60 % (for the percentage *multipy by 100*)
+        (200 - 140)/140 = 0.428 (for the ratio) 
+                        = 42.8 % (for the percentage *multipy by 100*)
         """
         daily_return = (self._today_price - self._yesterday_price) / self._yesterday_price
         return daily_return
 
-    def price_change(self): # for stock volume
+    def price_change(self): # for stock change
         """
         High vol = strong buying or selling pressure
         Low vol = thin liquidity and increased risk
@@ -53,8 +53,13 @@ class Conclusion:
                 print(f"narrow threshold {math.narrow_threshold(std,avg)} and the samle ({a_range})")
                 print("smaller than usual flucation")
 
-    def price_move(self): # for price change
+    def price_move(self): # for stock volume
         """
         price movement used in volume
         """
-        pass
+        vol_stock = self._csv_file["Volume"].values
+        close_stock = self._csv_file["Close"].values
+        # print(close_stock) # array
+        #print(vol_stock) # array
+        math.cal_vol_price_trend(close_stock, vol_stock)
+        math.cal_on_balence_vol(close_stock, vol_stock)
