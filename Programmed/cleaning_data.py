@@ -1,35 +1,61 @@
 import pandas
-from sklearn.ensemble import IsolationForest
 from sklearn.impute import KNNImputer
 import math_help_func as math
 import csv
 
 """
-(summary of filtering)
-"""
+This method rearranges the groups in order to make sure they are in propper alignment.
+Args:
+    Nothing
+Returns:
+    Nothing
+Raises:
+    Nothing
+Implemented:
+    If written in another file:
+        import cleaning_data.py as clean
 
-"""
-@TODO: fixed the group name to be the date
+        clean.alter_groups()
+
+    If written in the same file the method was invokded:
+        alter_groups()
 """
 def alter_groups():
-    with open('Programmed/NVIDIA_STOCK.csv') as content:
+    with open('Programmed/Standard Filter/NVIDIA_STOCK.csv') as content:
         groups = content.readline().rstrip("\n")
         extra_line = content.readline().rstrip("\n")
         date_line = content.readline().rstrip("\n")
         date_group = date_line.split(",")[0]
         new_groups = groups.replace("Price", date_group)
 
-        with open('Programmed/NVIDIA_STOCK_02.csv', 'w') as new_file:
+        with open('Programmed/Standard Filter/NVIDIA_STOCK_02.csv', 'w') as new_file:
             new_file.write(f"{new_groups}\n")
             for line in content:
                 new_file.write(line)
 
 
 """
-@TODO: remove outliers Interquartile Range
-lower bound: Q1 -1.5*IQR
-upper bound: Q3 + 1.5*IQR
-IQR: (Q3 - Q1)
+This method removes the outliers that are within the dataset.
+Args:
+    group = the given group the user wants to see
+    file_path = the location in which the dataset can be accessed
+Returns:
+    returns a list that contains all the values that are greater than the lower bound
+    calculated and less than the higher bound calculated
+        NOTE Remove Outliers Interquartile Range Formulas
+            lower bound: Q1 -1.5*IQR
+            upper bound: Q3 + 1.5*IQR
+            IQR: (Q3 - Q1)
+Raises:
+    Nothing
+Implemented:
+    If written in another file:
+        import cleaning_data.py as clean
+
+        clean.outliers_removed(group, file_path)
+
+    If written in the same file the method was invokded:
+        outliers_removed(group, file_path)
 """
 def outliers_removed(group, file_path):
     low_bound = 0
@@ -59,7 +85,21 @@ def outliers_removed(group, file_path):
 
 
 """
-@TODO: missing values
+This method gets rid of missing values found in the dataset.
+Args:
+    file_path = the location in which the dataset can be accessed
+Returns:
+    Nothing
+Raises:
+    Nothing
+Implemented:
+    If written in another file:
+        import cleaning_data.py as clean
+
+        clean.rid_missing_values(filepath)
+
+    If written in the same file the method was invokded:
+        rid_missing_values(filepath)
 """
 def rid_missing_values(filepath):
     overall_data = ""
@@ -68,37 +108,56 @@ def rid_missing_values(filepath):
         for line in new_content:
             end_of_date = line.index(",")
             overall_data += line[end_of_date+1:]    
-        with open('Programmed/NVIDIA_STOCK_04.csv', 'w') as new_file:
+        with open('Programmed/Standard Filter/NVIDIA_STOCK_04.csv', 'w') as new_file:
             new_file.write(overall_data)
     
-    data = pandas.read_csv('Programmed/NVIDIA_STOCK_04.csv')
+    data = pandas.read_csv('Programmed/Standard Filter/NVIDIA_STOCK_04.csv')
     result = blank_filler_algo.fit_transform(data)
     new_dataframe = pandas.DataFrame(result, columns=data.columns)
-    new_dataframe.to_csv("Programmed/NVIDIA_STOCK_04.csv", index = False)
+    new_dataframe.to_csv("Programmed/Standard Filter/NVIDIA_STOCK_04.csv", index = False)
 
 
+"""
+This is the method filters all the outliers and missing values. In addtion to making sure
+the raw dataset's attributes are propperly aligned.
+Args:
+    Nothing
+Returns:
+    returns a filter dataset that does not have any outliers or missing values
+Raises:
+    Nothing
+Implemented:
+    If written in another file:
+        import cleaning_data.py as clean
+
+        clean.main()
+
+    If written in the same file the method was invokded:
+        main()
+"""
 def main():
     alter_groups()
-    with open('Programmed/NVIDIA_STOCK_02.csv', 'r') as data:
+    with open('Programmed/Standard Filter/NVIDIA_STOCK_02.csv', 'r') as data:
         gathered = {"Date": [],"Adj Close": [],"Close": [],"High": [],"Low": [],"Open": [],"Volume": []}
         group_list = data.readline().rstrip("\n").split(",")
         data_list = data.readlines()
         for index in range(len(group_list)):
             if index > 0:
-                collected = outliers_removed(index, 'Programmed/NVIDIA_STOCK_02.CSV')
+                collected = outliers_removed(index, 'Programmed/Standard Filter/NVIDIA_STOCK_02.CSV')
                 gathered[group_list[index]] = collected
             else:
                 for line in data_list:
                     data = line.split(",")
                     gathered["Date"].append(data[0])
         
-        with open("Programmed/NVIDIA_STOCK_03.csv", "w") as final_data:
+        with open("Programmed/Standard Filter/NVIDIA_STOCK_03.csv", "w") as final_data:
             writer = csv.DictWriter(final_data, fieldnames=gathered.keys())
             writer.writeheader()
             rows = [dict(zip(gathered, t)) for t in zip(*gathered.values())]
             writer.writerows(rows)
-    rid_missing_values("Programmed/NVIDIA_STOCK_03.csv")
+    rid_missing_values("Programmed/Standard Filter/NVIDIA_STOCK_03.csv")
+    return gathered
 
-    #NOTE get started on the isolation tree
+    #NOTE make into a class.. 
 
 main()
