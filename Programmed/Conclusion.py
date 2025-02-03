@@ -2,13 +2,43 @@ import math_help_func as math
 import pandas
 
 class Conclusion:
-    def __init__(self, filepath):
+    """
+    This class is a blueprint of the object resposible for finding forestcasting results
+    and the calculate the daily return, price movement and price direction.
+
+    Attributes:
+        csv_file = the content in the given csv file
+        today_price = the values in the attribute "Close" (Today's Close Price)
+        yesterday_price = the values in the attribute "Adj Close" (Yesterday's Close Price)
+        high_stock = the values in the attribute "High" (high stocks during that day)
+        low_stock = the values in the attribute "Low" (low stocks during that day) 
+
+    """
+    def __init__(self, filepath:str):
         self._csv_file = pandas.read_csv(filepath)
         self._today_price = self._csv_file["Close"].values
         self._yesterday_price = self._csv_file["Adj Close"].values
         self._high_stock = self._csv_file["High"].values
         self._low_stock = self._csv_file["Low"].values
 
+
+    """
+    This method is used to calculate the daily return per record.
+    Args:
+        Nothing
+    Returns:
+        returns the value that represents the daily return for given record
+    Raises:
+        Nothing
+    Implemented:
+        If written in another file:
+            import Conclusion.py as result
+
+            result.Conclusion(filepath).calculate_daily_return()
+
+        If written in the same file the method was invokded:
+            calculate_daily_return()
+    """
     def calculate_daily_return(self): # daily return
         """
         Daily Return = (Today's Closing Price - Yesterday's Closing Price) / Yesterday's Closing 
@@ -24,6 +54,24 @@ class Conclusion:
         daily_return = (self._today_price - self._yesterday_price) / self._yesterday_price
         return daily_return
 
+
+    """
+    This method is used for calculating price change per record
+    Args:
+        Nothing
+    Returns:
+        returns the value that represents the price change for given record
+    Raises:
+        Nothing
+    Implemented:
+        If written in another file:
+            import Conclusion.py as result
+
+            result.Conclusion(filepath).price_change()
+
+        If written in the same file the method was invokded:
+            price_change()
+    """
     def price_change(self): # for stock change
         """
         High vol = strong buying or selling pressure
@@ -35,7 +83,7 @@ class Conclusion:
         """
         low_stock_counter = 0
         all_ranges = []
-        file_path = "Programmed/ALL_PRICE_RANGES.csv"
+        file_path = "Programmed/Calculations/ALL_PRICE_RANGES.csv"
         for stock in self._high_stock:
             all_ranges.append(stock - self._low_stock[low_stock_counter])
             low_stock_counter += 1
@@ -52,7 +100,25 @@ class Conclusion:
             if math.narrow_threshold(std, avg) > a_range: # narrow compared to the average price range
                 # print(f"narrow threshold {math.narrow_threshold(std,avg)} and the samle ({a_range})")
                 print("smaller than usual flucation")
+    
+    
+    """
+    The method is used to calculate price movement per record
+    Args:
+        Nothing
+    Returns:
+        Nothing
+    Raises:
+        Nothing
+    Implemented:
+        If written in another file:
+            import Conclusion.py as result
 
+            result.Conclusion(filepath).price_move()
+
+        If written in the same file the method was invokded:
+            price_move()
+    """
     def price_move(self): # for stock volume
         """
         price movement used in volume
@@ -73,7 +139,25 @@ class Conclusion:
         math.cal_vol_price_trend(close_stock, vol_stock)
         math.cal_on_balence_vol(close_stock, vol_stock)
     
-    def price_cal_with_predict(self, all_info):
+
+    """
+    The method is used to calculate the predicted price change
+    Args:
+        all_info = contains teh entire dataset that is given
+    Returns:
+        Nothing
+    Raises:
+        Nothing
+    Implemented:
+        If written in another file:
+            import Conclusion.py as result
+
+            result.Conclusion(filepath).price_cal_with_predict(all_info)
+
+        If written in the same file the method was invokded:
+            price_cal_with_predict(all_info)
+    """
+    def price_cal_with_predict(self, all_info:str):
         """
         price change:
             price change = (Today's Predicted Close - Yesterday's Predicted Close)
@@ -86,9 +170,26 @@ class Conclusion:
             price_change = today_predict[index] - yesterday_predict[index]
             all_price_change.append(price_change)
         price_change_dataframe = pandas.DataFrame({"predict price change": all_price_change})
-        price_change_dataframe.to_csv("Programmed/PREDICTED_PRICE_CHANGE.csv")
+        price_change_dataframe.to_csv("Programmed/Predicted Data/PREDICTED_PRICE_CHANGE.csv")
 
 
+    """
+    This method is used to calcualte the predicted price range.
+    Args:
+        all_info = contains teh entire dataset that is given
+    Returns:
+        Nothing
+    Raises:
+        Nothing
+    Implemented:
+        If written in another file:
+            import Conclusion.py as result
+
+            result.Conclusion(filepath).range_cal_with_predict(all_info)
+
+        If written in the same file the method was invokded:
+            range_cal_with_predict(all_info)
+    """
     def range_cal_with_predict(self, all_info):
         """
         predicted price range:
@@ -101,9 +202,26 @@ class Conclusion:
             predicted_range = predict_high[index] - predict_low[index]
             all_predict_range.append(predicted_range)
         predict_range_dataframe = pandas.DataFrame({"predicted range": all_predict_range})
-        predict_range_dataframe.to_csv("Programmed/PREDICTED_PRICE_RANGE.csv")
+        predict_range_dataframe.to_csv("Programmed/Predicted Data/PREDICTED_PRICE_RANGE.csv")
 
 
+    """
+    This method is used to calculate the predicted daily return.
+    Args:
+        all_info = contains teh entire dataset that is given
+    Returns:
+        Nothing
+    Raises:
+        Nothing
+    Implemented:
+        If written in another file:
+            import Conclusion.py as result
+
+            result.Conclusion(filepath).daily_return_with_predict(all_info)
+
+        If written in the same file the method was invokded:
+            daily_return_with_predict(all_info)
+    """
     def daily_return_with_predict(self, all_info):
         """
         daily return:
@@ -112,13 +230,30 @@ class Conclusion:
         today_predict = pandas.read_csv(all_info)["Guess Close"]
         yesterday_predict = pandas.read_csv(all_info)["Adj Close"]
         all_predict_returns = []
-        for index in range(len(today_predict)):
+        for _ in range(len(today_predict)):
             daily_return = (today_predict - yesterday_predict) / yesterday_predict
             all_predict_returns.append(daily_return)
         predict_return_dataframe = pandas.DataFrame({"Predicted daily return": all_predict_returns})
-        predict_return_dataframe.to_csv("Programmed/PREDICTED_DAILY_RETURN.csv")
+        predict_return_dataframe.to_csv("Programmed/Predicted Data/PREDICTED_DAILY_RETURN.csv")
 
 
+    """
+    This method is used to calculate the predicted daily price movement.
+    Args:
+        all_info = contains teh entire dataset that is given
+    Returns:
+        Nothing
+    Raises:
+        Nothing
+    Implemented:
+        If written in another file:
+            import Conclusion.py as result
+
+            result.Conclusion(filepath).daily_mov_with_predict(all_info)
+
+        If written in the same file the method was invokded:
+            daily_mov_with_predict(all_info)
+    """
     def daily_mov_with_predict(self, all_info):
         """
         daily movement direction:
@@ -130,6 +265,9 @@ class Conclusion:
         # read csv with the price change
         # call the prediction method store it in predict_change
         predict_changes = []
+        price_up = 0
+        price_down = 0
+        no_change = 0
         all_moves = [price_up, price_down, no_change]
         for change in predict_changes:
             if change > 0:
@@ -140,6 +278,23 @@ class Conclusion:
                 no_change += 1
 
 
+    """
+    This method is used to calculate the mean squarred error (MSE)
+    Args:
+        all_info = contains teh entire dataset that is given
+    Returns:
+        Nothing
+    Raises:
+        Nothing
+    Implemented:
+        If written in another file:
+            import Conclusion.py as result
+
+            result.Conclusion(filepath).cal_mse(all_info)
+
+        If written in the same file the method was invokded:
+            cal_mse(all_info)
+    """
     def cal_mse(self, all_info):
         """
         evaluate model:
@@ -148,16 +303,33 @@ class Conclusion:
         """
         predict_close = pandas.read_csv(all_info)["Guess Close"]
         actual_close = pandas.read_csv(all_info)["Close"]
-        total_num = len(actual_close.values)
-        all_mse = []
+        total_num = len(predict_close)
+        summation = 0
         # loop it
-        for index in range(len(predict_close)):
-            mse = (1/total_num) * sum(predict_close[index] - actual_close[index])**2
-            all_mse.append(mse)
-        mse_data_frame = pandas.DataFrame({"Mean Squared Error": all_mse})
-        mse_data_frame.to_csv("Programmed/MEAN_SQUARE_ERROR.csv")
+        for index in range(total_num):
+            summation += (predict_close[index] - actual_close[index])**2
+        mse = (1/total_num) *summation
+        mse_data_frame = pandas.DataFrame({"Mean Squared Error": [mse]})
+        mse_data_frame.to_csv("Programmed/Calculations/MEAN_SQUARE_ERROR.csv")
 
 
+    """
+    This method is used to calculate the root mean squared error.
+    Args:
+        all_info = contains teh entire dataset that is given
+    Returns:
+        Nothing
+    Raises:
+        Nothing
+    Implemented:
+        If written in another file:
+            import Conclusion.py as result
+
+            result.Conclusion(filepath).cal_rmse(all_info)
+
+        If written in the same file the method was invokded:
+            cal_rmse(all_info)
+    """
     def cal_rmse(self, all_info):
         """
         evaluate model:
@@ -170,9 +342,27 @@ class Conclusion:
             rmse = data**(1/2)
             all_rmse.append(rmse)
         rmse_data_frame = pandas.DataFrame({"Root Mean Squared Error": all_rmse})
-        rmse_data_frame.to_csv("Programmed/ROOT_MEAN_SQUARED_ERROR.csv")
+        rmse_data_frame.to_csv("Programmed/Calculations/ROOT_MEAN_SQUARED_ERROR.csv")
 
 
+    """
+    This method is use to calculate the r squared value.
+    Args:
+        all_info = contains teh entire dataset that is given
+        group = contains the group the user would like to see
+    Returns:
+        Nothing
+    Raises:
+        Nothing
+    Implemented:
+        If written in another file:
+            import Conclusion.py as result
+
+            result.Conclusion(filepath).cal_r_square(self, all_info, group)
+
+        If written in the same file the method was invokded:
+            cal_r_square(self, all_info, group)
+    """
     def cal_r_square(self, all_info, group):
         """
         evaluate model:
@@ -182,13 +372,15 @@ class Conclusion:
         """
         all_data = pandas.read_csv(all_info)
         all_group = ["No Activity", "Activity"]
+        no_activity = 0
+        activity = 0
         all_value = [no_activity, activity]
         actual_avg = math.calculate_mean(all_data, group)
         total_sse = 0
         total_tss = 0
         for index in range(len(all_data[group])):
-            sse = math.calculate_sse(all_group, index, group)
-            tss = math.calculate_tss(all_data, index, actual_avg)
+            sse = math.calculate_sse(all_data, index, group)
+            tss = math.calculate_tss(all_data, index, actual_avg, group)
             total_sse += sse
             total_tss += tss
         r_squt = 1 - (total_sse/total_tss)
