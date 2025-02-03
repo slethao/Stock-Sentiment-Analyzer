@@ -7,10 +7,13 @@ import csv
 This method rearranges the groups in order to make sure they are in propper alignment.
 Args:
     Nothing
+
 Returns:
     Nothing
+
 Raises:
     Nothing
+
 Implemented:
     If written in another file:
         import cleaning_data.py as clean
@@ -21,14 +24,14 @@ Implemented:
         alter_groups()
 """
 def alter_groups():
-    with open('Programmed/Standard Filter/NVIDIA_STOCK.csv') as content:
+    with open('Programmed/Standard Filter/Bronze/NVIDIA_STOCK.csv') as content:
         groups = content.readline().rstrip("\n")
         extra_line = content.readline().rstrip("\n")
         date_line = content.readline().rstrip("\n")
         date_group = date_line.split(",")[0]
         new_groups = groups.replace("Price", date_group)
 
-        with open('Programmed/Standard Filter/NVIDIA_STOCK_02.csv', 'w') as new_file:
+        with open('Programmed/Standard Filter/Silver/NVIDIA_STOCK_02.csv', 'w') as new_file:
             new_file.write(f"{new_groups}\n")
             for line in content:
                 new_file.write(line)
@@ -108,13 +111,13 @@ def rid_missing_values(filepath):
         for line in new_content:
             end_of_date = line.index(",")
             overall_data += line[end_of_date+1:]    
-        with open('Programmed/Standard Filter/NVIDIA_STOCK_04.csv', 'w') as new_file:
+        with open('Programmed/Standard Filter/Gold/NVIDIA_STOCK_04.csv', 'w') as new_file:
             new_file.write(overall_data)
     
-    data = pandas.read_csv('Programmed/Standard Filter/NVIDIA_STOCK_04.csv')
+    data = pandas.read_csv('Programmed/Standard Filter/Gold/NVIDIA_STOCK_04.csv')
     result = blank_filler_algo.fit_transform(data)
     new_dataframe = pandas.DataFrame(result, columns=data.columns)
-    new_dataframe.to_csv("Programmed/Standard Filter/NVIDIA_STOCK_04.csv", index = False)
+    new_dataframe.to_csv("Programmed/Standard Filter/Gold/NVIDIA_STOCK_04.csv", index = False)
 
 
 """
@@ -137,25 +140,25 @@ Implemented:
 """
 def main():
     alter_groups()
-    with open('Programmed/Standard Filter/NVIDIA_STOCK_02.csv', 'r') as data:
+    with open('Programmed/Standard Filter/Silver/NVIDIA_STOCK_02.csv', 'r') as data:
         gathered = {"Date": [],"Adj Close": [],"Close": [],"High": [],"Low": [],"Open": [],"Volume": []}
         group_list = data.readline().rstrip("\n").split(",")
         data_list = data.readlines()
         for index in range(len(group_list)):
             if index > 0:
-                collected = outliers_removed(index, 'Programmed/Standard Filter/NVIDIA_STOCK_02.CSV')
+                collected = outliers_removed(index, 'Programmed/Standard Filter/Silver/NVIDIA_STOCK_02.CSV')
                 gathered[group_list[index]] = collected
             else:
                 for line in data_list:
                     data = line.split(",")
                     gathered["Date"].append(data[0])
         
-        with open("Programmed/Standard Filter/NVIDIA_STOCK_03.csv", "w") as final_data:
+        with open("Programmed/Standard Filter/Gold/NVIDIA_STOCK_03.csv", "w") as final_data:
             writer = csv.DictWriter(final_data, fieldnames=gathered.keys())
             writer.writeheader()
             rows = [dict(zip(gathered, t)) for t in zip(*gathered.values())]
             writer.writerows(rows)
-    rid_missing_values("Programmed/Standard Filter/NVIDIA_STOCK_03.csv")
+    rid_missing_values("Programmed/Standard Filter/Gold/NVIDIA_STOCK_03.csv")
     return gathered
 
     #NOTE make into a class.. 
