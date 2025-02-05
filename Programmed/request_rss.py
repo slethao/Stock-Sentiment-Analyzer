@@ -32,7 +32,7 @@ class InfoGathering():
         return all_content
 
     def load_to_csv(self, given_content):
-        file_path = "Programmed/RSS Feeder/Event.csv"
+        file_path = "Programmed/RSS Feeder/Bronze/Event.csv"
         content_dataframe = pandas.DataFrame(given_content)
         content_dataframe.to_csv(file_path, index = False)
         
