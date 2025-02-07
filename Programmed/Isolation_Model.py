@@ -13,9 +13,10 @@ class IsolationModel:
         model_obj = the obj to initilize the IsolationForest
 
     """
-    def __init__(self, group: str):
-        self._data_used = pan.read_csv("Programmed/Standard Filter/NVIDIA_STOCK_03.csv")
-        self._x_value = self._data_used[[group]]
+    def __init__(self, group: str, data_used):
+        #self._data_used = pan.read_csv("Programmed/Standard Filter/Gold/NVIDIA_STOCK_03.csv")
+        self._data_used = pan.read_csv(data_used)
+        self._x_value = pan.DataFrame(self._data_used[group])
         self._model_obj = IsolationForest(contamination=0.1)
     
 
@@ -78,9 +79,9 @@ class IsolationModel:
         If written in the same file the method was invokded:
             set_x_value(single_group)
     """
-    def set_x_value(self, single_group):
-        all_groups = self._data_used[["Adj Close","Close","High","Low","Open","Volume"]]
-        if single_group in all_groups.columns:
+    def set_x_value(self, single_group, all_groups):
+        # all_groups = self._data_used[["Adj Close","Close","High","Low","Open","Volume"]]
+        if single_group in all_groups:
             self._x_value = self._data_used[[single_group]] 
         else:
             print(f"The column ({single_group}) does not exisit in the csv file.")
@@ -103,7 +104,12 @@ class IsolationModel:
         If written in the same file the method was invokded:
             anomaly_results()
     """    
+
+    def set_data_used(self, new_file_path):
+        self._data_used = pan.read_csv(new_file_path)
+
     def anomaly_results(self):
+        # self._x_value = series change to a dataframe
         self._model_obj.fit(self._x_value) # method
         anomaly_score = self._model_obj.decision_function(self._x_value) # method
         return anomaly_score
