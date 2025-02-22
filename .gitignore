@@ -1,2 +1,3 @@
 # .gitignore
+~/.kaggle/kaggle.json
 .env
