@@ -1,5 +1,11 @@
+import matplotlib.pyplot
 import math_help_func as math
 import pandas
+import plot_transfer as image
+import matplotlib
+import tensorflow
+from PIL import Image
+import numpy
 
 class Conclusion:
     """
@@ -93,14 +99,28 @@ class Conclusion:
         std = math.standard_dev(avg, all_ranges)
         #print(f"std {std}")
         # print(f"Avg price range: {avg}")
-        for a_range in all_ranges:
-            if math.wide_threshold(std, avg) < a_range: # wide compared to the average price range
-                print("large than usual flucation")
-                # print(f"wide: threshold {math.wide_threshold(std, avg)} and the samle ({a_range})")
-            if math.narrow_threshold(std, avg) > a_range: # narrow compared to the average price range
-                # print(f"narrow threshold {math.narrow_threshold(std,avg)} and the samle ({a_range})")
-                print("smaller than usual flucation")
-    
+        # for a_range in all_ranges:
+        #     if math.wide_threshold(std, avg) < a_range: # wide compared to the average price range
+        #         print("large than usual flucation")
+        #         # print(f"wide: threshold {math.wide_threshold(std, avg)} and the samle ({a_range})")
+        #     if math.narrow_threshold(std, avg) > a_range: # narrow compared to the average price range
+        #         # print(f"narrow threshold {math.narrow_threshold(std,avg)} and the samle ({a_range})")
+        #         print("smaller than usual flucation")
+        #@TODO: create a matplotlib graph here
+        fig = matplotlib.pyplot.figure(figsize=(12,6))
+        matplotlib.pyplot.vlines(self._csv_file["Date"].values, self._low_stock, self._high_stock, label="Price Range")
+        matplotlib.pyplot.axhline(math.wide_threshold(std, avg))
+        matplotlib.pyplot.axhline(math.narrow_threshold(std, avg))
+        matplotlib.pyplot.axhline(avg)
+        matplotlib.pyplot.xlabel("Date")
+        matplotlib.pyplot.ylabel("Price Range")
+        matplotlib.pyplot.grid(True)
+        matplotlib.pyplot.xticks(rotation = 45)
+        
+        writer = tensorflow.summary.create_file_writer("Programmed/logs/mode_price_change") # Create a writer 
+        with writer.as_default():
+            tensorflow.summary.image("matplotlib_plot", image.plot_to_image(fig), step=0)
+
     
     """
     The method is used to calculate price movement per record
@@ -138,7 +158,7 @@ class Conclusion:
         #print(vol_stock) # array
         math.cal_vol_price_trend(close_stock, vol_stock)
         math.cal_on_balence_vol(close_stock, vol_stock)
-    
+        #@TODO: create a matplotlib graph here
 
     """
     The method is used to calculate the predicted price change
@@ -170,9 +190,15 @@ class Conclusion:
             price_change = today_predict[index] - yesterday_predict[index]
             all_price_change.append(price_change)
         price_change_dataframe = pandas.DataFrame({"predict price change": all_price_change})
-        price_change_dataframe.to_csv("Programmed/Predicted Data/PREDICTED_PRICE_CHANGE.csv")
+        #@TODO: create a matplotlib graph here
+        matplotlib.pyplot.plot(pandas.read_csv(all_info)["Date"].values,all_price_change)
+        fig = matplotlib.pyplot.gcf()
+        writer = tensorflow.summary.create_file_writer("Programmed/logs") # Create a writer 
+        with writer.as_default():
+            tensorflow.summary.image("matplotlib_plot_04", image.plot_to_image(fig), step=0)
 
-
+        price_change_dataframe.to_csv("Programmed/Predicted Data/PREDICTED_PRICE_CHANGE.csv", index = False)
+        
     """
     This method is used to calcualte the predicted price range.
     Args:
@@ -203,7 +229,11 @@ class Conclusion:
             all_predict_range.append(predicted_range)
         predict_range_dataframe = pandas.DataFrame({"predicted range": all_predict_range})
         predict_range_dataframe.to_csv("Programmed/Predicted Data/PREDICTED_PRICE_RANGE.csv")
-
+        matplotlib.pyplot.plot(pandas.read_csv(all_info)["Date"].values,all_predict_range)
+        fig = matplotlib.pyplot.gcf()
+        writer = tensorflow.summary.create_file_writer("Programmed/logs") # Create a writer 
+        with writer.as_default():
+            tensorflow.summary.image("matplotlib_plot_05", image.plot_to_image(fig), step=0)
 
     """
     This method is used to calculate the predicted daily return.
@@ -227,14 +257,19 @@ class Conclusion:
         daily return:
             Daily return = (Today's predicted close - yesterday's predicted close) / Yesterday's predicted close
         """
-        today_predict = pandas.read_csv(all_info)["Guess Close"]
-        yesterday_predict = pandas.read_csv(all_info)["Adj Close"]
+        today_predict = pandas.read_csv(all_info)["Guess Close"].values
+        yesterday_predict = pandas.read_csv(all_info)["Adj Close"].values
         all_predict_returns = []
-        for _ in range(len(today_predict)):
-            daily_return = (today_predict - yesterday_predict) / yesterday_predict
+        for index in range(len(today_predict)):
+            daily_return = (today_predict[index] - yesterday_predict[index]) / yesterday_predict[index]
             all_predict_returns.append(daily_return)
         predict_return_dataframe = pandas.DataFrame({"Predicted daily return": all_predict_returns})
-        predict_return_dataframe.to_csv("Programmed/Predicted Data/PREDICTED_DAILY_RETURN.csv")
+        matplotlib.pyplot.plot(pandas.read_csv(all_info)["Date"].values,all_predict_returns)
+        fig = matplotlib.pyplot.gcf()
+        writer = tensorflow.summary.create_file_writer("Programmed/logs") # Create a writer 
+        with writer.as_default():
+            tensorflow.summary.image("matplotlib_plot_06", image.plot_to_image(fig), step=0)
+        predict_return_dataframe.to_csv("Programmed/Predicted Data/PREDICTED_DAILY_RETURN.csv", index = False)
 
 
     """
@@ -264,19 +299,21 @@ class Conclusion:
         """
         # read csv with the price change
         # call the prediction method store it in predict_change
-        predict_changes = []
-        price_up = 0
-        price_down = 0
-        no_change = 0
-        all_moves = [price_up, price_down, no_change]
-        for change in predict_changes:
+        predict_changes = pandas.read_csv(all_info)["predict price change"].values
+        move_val = []
+        for change in predict_changes.astype(float):
             if change > 0:
-                price_up += 1
+                move_val.append(1)
             elif change < 0:
-                price_down += 1
+                move_val.append(-1)
             else:
-                no_change += 1
-
+                move_val.append(0)
+        matplotlib.pyplot.plot(range(len(predict_changes)), move_val)
+        matplotlib.pyplot.yticks([-1, 0, 1], ["Price Down", "No Change", "Price Up"])
+        fig = matplotlib.pyplot.gcf() # Get the current figure
+        writer = tensorflow.summary.create_file_writer("Programmed/logs") # Create a writer 
+        with writer.as_default():
+            tensorflow.summary.image("matplotlib_plot_07", image.plot_to_image(fig), step=0)
 
     """
     This method is used to calculate the mean squarred error (MSE)
@@ -310,6 +347,18 @@ class Conclusion:
             summation += (predict_close[index] - actual_close[index])**2
         mse = (1/total_num) *summation
         mse_data_frame = pandas.DataFrame({"Mean Squared Error": [mse]})
+        matplotlib.pyplot.plot(range(total_num), actual_close, label="Actual Close", color="blue")
+        matplotlib.pyplot.plot(range(total_num), predict_close, label="Predicted Close", color="red", linestyle="--") # dashed line
+
+        matplotlib.pyplot.xlabel("Time/Index")  # X-axis label
+        matplotlib.pyplot.ylabel("Closing Price")  # Y-axis label
+        matplotlib.pyplot.title("Actual vs. Predicted Closing Prices")  # Plot title
+
+        fig = matplotlib.pyplot.gcf() # Get the current figure
+
+        writer = tensorflow.summary.create_file_writer("Programmed/logs") # Create a writer 
+        with writer.as_default():
+            tensorflow.summary.image("matplotlib_plot_08", image.plot_to_image(fig), step=0)
         mse_data_frame.to_csv("Programmed/Calculations/MEAN_SQUARE_ERROR.csv")
 
 
