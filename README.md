@@ -57,6 +57,13 @@ The results that are found will be stored into a database and displayed on Tenso
         <code>pip install csv<br></code>
         <code>pip install request<br></code>
         <code>pip install scikit-learn</code>
+        Kaggle API Setup:
+        <li><h4><span style="color:#E5989B">Create your own Kaggle API token by going to your Kaggle account settings.</span><br>
+        1.  Download the <code>kaggle.json</code> file. <br>
+        2.  Place the <code>kaggle.json</code> file in the <code>~/.kaggle/</code> directory (create the directory if it doesn't exist).
+        OR<br>
+        Set the <code>KAGGLE_USERNAME</code> and <code>KAGGLE_KEY</code> environment variables.
+</h4></li>
 </blockquote>
 
 ## <span style="color:#FFB4A2">Usage
