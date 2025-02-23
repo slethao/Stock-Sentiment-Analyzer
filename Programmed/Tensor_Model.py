@@ -15,11 +15,19 @@ class TensorModel():
         anomaly_scores = the calculated scores on the values of the dataset to incide if they are anomalies
         data_used = the entire content of the datset chosen
     """
-    def __init__(self, group_chosen:str):
+    def __init__(self, group_chosen:str, file_path):
         self._group = group_chosen
-        self._iso_obj = iso.IsolationModel(self._group)
+        self._iso_obj = iso.IsolationModel(self._group, file_path) # "Programmed/Standard Filter/Gold/NVIDIA_STOCK_03.csv"
         self._anomaly_scores = self._iso_obj.anomaly_results()
         self._data_used = self._iso_obj.get_data_used()
+
+
+    def get_data_used(self):
+        return self._data_used
+
+
+    def get_group(self):
+        return self._group
 
 
     """
@@ -79,6 +87,26 @@ class TensorModel():
                                                     Dense(1) 
         ]) 
         return norm_model
+    
+    def build_model_other(self):
+        #date_column = self._data_used 
+        feature = self._data_used[self._data_used.columns].values
+        labels = self._data_used[self._group].values
+        scaler = StandardScaler() 
+        feature = scaler.fit_transform(feature)
+        norm_model = tensorflow.keras.Sequential([ 
+                                                    #tensorflow.keras.Input(shape=(feature.shape(100,5))),
+                                                    Dense(128, activation='relu', kernel_regularizer=tensorflow.keras.regularizers.l2(0.01)),
+                                                    Dropout(0.5),
+                                                    Dense(64, activation='relu', kernel_regularizer=tensorflow.keras.regularizers.l2(0.01)),
+                                                    Dropout(0.5),
+                                                    Dense(32, activation='relu', kernel_regularizer=tensorflow.keras.regularizers.l2(0.01)),
+                                                    Dropout(0.5),
+                                                    Dense(1) 
+        ])
+        norm_model.compile(loss = tensorflow.keras.losses.MeanSquaredError(),
+                      optimizer = tensorflow.keras.optimizers.Adam())
+        norm_model.fit(feature, labels, epochs = 10)
 
 
     """
@@ -98,12 +126,20 @@ class TensorModel():
         If written in the same file the method was invokded:
             train_model()
     """
-    def train_model(self):
-        current_model = TensorModel(self._group).build_model()
+    def train_model(self, filepath):
+        current_model = TensorModel(self._group, filepath).build_model()
         current_model.compile(loss = tensorflow.keras.losses.MeanSquaredError(),
                    optimizer = tensorflow.keras.optimizers.Adam(learning_rate = 0.001)) # learning rate is good
         return current_model
 
+    def train_model_other(self, filepath):
+        current_model = TensorModel(self._group, filepath).build_model_other()
+        # normalize
+        # adapt
+
+        current_model.compile(loss = tensorflow.keras.losses.MeanSquaredError(),
+                   optimizer = tensorflow.keras.optimizers.Adam(learning_rate = 0.001)) # learning rate is good
+        return current_model
 
     """
     This method is used to evaluate the machine learning model to compare the data loss versus data validation
@@ -123,13 +159,13 @@ class TensorModel():
             evaluate_model(train_model)
     """
     #@tensorflow.function
-    def evaluate_model(self, train_model):
+    def evaluate_model(self, train_model, call_back):
         features = self._data_used.drop(columns=['Date', self._iso_obj.get_x_value().columns[0]]).values
         scaler = StandardScaler()
         features = scaler.fit_transform(features)
 
         train_model.fit(features, self._iso_obj.get_x_value().values, epochs = 250, batch_size = 32,
-               callbacks = [tensorflow.keras.callbacks.EarlyStopping(monitor= 'val_loss', patience=10, restore_best_weights=True)],
+               callbacks = [tensorflow.keras.callbacks.EarlyStopping(monitor= 'val_loss', patience=10, restore_best_weights=True), call_back],
                validation_split=0.424
               )  
         evaluate = train_model.evaluate(features, self._iso_obj.get_x_value().values)
@@ -167,11 +203,11 @@ class TensorModel():
         scaler = StandardScaler() 
         features = scaler.fit_transform(features) 
         predict = train_model.predict(features)
-        predict_data_frame = pandas.DataFrame({ "Date": pandas.read_csv("Programmed/Standard Filter/NVIDIA_STOCK_03.csv")["Date"].values,
-                                                f"{self._group}": pandas.read_csv("Programmed/Standard Filter/NVIDIA_STOCK_03.csv")[f"{self._group}"].values,
+        predict_data_frame = pandas.DataFrame({ "Date": pandas.read_csv("Programmed/Standard Filter/Gold/NVIDIA_STOCK_03.csv")["Date"].values,
+                                                f"{self._group}": pandas.read_csv("Programmed/Standard Filter/Gold/NVIDIA_STOCK_03.csv")[f"{self._group}"].values,
                                                f"Guess {self._group}": predict.flatten()}) # add the data set here
         predict_data_frame.to_csv(file_path, index = False)
-        return predict_data_frame
+        return predict
 
 #NOTE create a personal training method
 
