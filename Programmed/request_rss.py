@@ -25,10 +25,10 @@ class InfoGathering():
                     all_content["Link"].append(part.link)
                     all_content["Summary"].append(part.summary)
                     all_content["Published"].append(part.published)
-                    print(f"title: {part.title}")
-                    print(f"link: {part.link}")
-                    print(f"brief: {part.summary}")
-                    print(f"published: {part.published}")
+                    # print(f"title: {part.title}")
+                    # print(f"link: {part.link}")
+                    # print(f"brief: {part.summary}")
+                    # print(f"published: {part.published}")
         return all_content
 
     def load_to_csv(self, given_content):
