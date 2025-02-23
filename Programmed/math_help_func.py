@@ -1,4 +1,7 @@
+import matplotlib.pyplot
 import pandas
+import tensorflow
+import plot_transfer as img
 
 """
 This method finds the median of a sorted dataset based on its index
@@ -236,6 +239,7 @@ def cal_vol_price_trend(close, vol_col):
         Volume Today = volume column for each row
     """
     vpt_array = []
+    day_array = []
     vpt_yesterday = 0 # use is similar to a temp variable
     vol_counter = 0
     # loop here
@@ -248,9 +252,16 @@ def cal_vol_price_trend(close, vol_col):
         vpt_array.append(vpt_today)
         vpt_yesterday = vpt_today
         vol_counter += 1
+        day_array.append(vol_counter)
 
     # data frame
     vpt_dataframe = pandas.DataFrame({"VPT": vpt_array})
+    #@TODO: create candstick here
+    matplotlib.pyplot.plot(day_array,vpt_array)
+    fig = matplotlib.pyplot.gcf()
+    writer = tensorflow.summary.create_file_writer("Programmed/logs") # Create a writer 
+    with writer.as_default():
+        tensorflow.summary.image("matplotlib_plot_02", img.plot_to_image(fig), step=0)
     # csv
     vpt_dataframe.to_csv("Programmed/Calculations/VPT_DATA.csv", index = False)
 
@@ -287,6 +298,7 @@ def cal_on_balence_vol(close, vol_col):
             Yesterday's Close = closing price of the security from the previous day
     """
     obv_array = []
+    day_arry = []
     obv_yesterday = 0
 
     # loop here
@@ -303,8 +315,16 @@ def cal_on_balence_vol(close, vol_col):
             obv_today = obv_yesterday # per record
         obv_array.append(obv_today)
         obv_yesterday = obv_today
+        day_arry.append(index+1)
     # put itno a dataframe
     obv_dataframe = pandas.DataFrame({"OBV": obv_array})
+    
+    matplotlib.pyplot.plot(day_arry, obv_array)
+    fig = matplotlib.pyplot.gcf() # Get the current figure
+
+    writer = tensorflow.summary.create_file_writer("Programmed/logs") # Create a writer 
+    with writer.as_default():
+        tensorflow.summary.image("matplotlib_plot_03", img.plot_to_image(fig), step=0)
     # put into a csv
     obv_dataframe.to_csv("Programmed/Calculations/OBV_DATA.csv", index = False)
 
