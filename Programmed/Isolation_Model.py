@@ -1,90 +1,148 @@
-import pandas
+from sklearn.ensemble import IsolationForest
+import pandas as pan
 
-"""
-This method combines all the predicted files into one csv file.
-Args:
-    Nonthing
-Returns:
-    Nonthing
-Raises:
-    Nonthing
-Implementated:
-    If written in another file:
-        import files_help_func.py as file
 
-        file.combining_files()
+class IsolationModel:
+    """
+    This class is the blueprint for the object resposible 
+    for creating an Isolation Forest Model.
 
-    If written in the same file the method was invokded:
-        combining_files()
+    Attributes: 
+        data_used = the content holds in the dataset
+        x_value = the values that are held in a specific attribute
+        model_obj = the obj to initilize the IsolationForest
 
-"""
-def combining_files(): 
-    # all the predicted data for ecah attribute in the orginal csv. (NVIDIA_STOCK.csv)
-    adj_close_csv = pandas.read_csv("Programmed/Predicted Data/NVIDIA_STOCK_PREDICT_AdjClose.csv")
-    close_csv = pandas.read_csv("Programmed/Predicted Data/NVIDIA_STOCK_PREDICT_Close.csv")
-    high_csv = pandas.read_csv("Programmed/Predicted Data/NVIDIA_STOCK_PREDICT_High.csv")
-    low_csv = pandas.read_csv("Programmed/Predicted Data/NVIDIA_STOCK_PREDICT_Low.csv")
-    open_csv = pandas.read_csv("Programmed/Predicted Data/NVIDIA_STOCK_PREDICT_Open.csv")
-    volume_csv = pandas.read_csv("Programmed/Predicted Data/NVIDIA_STOCK_PREDICT_Volume.csv")
+    """
+    def __init__(self, group: str, data_used):
+        #self._data_used = pan.read_csv("Programmed/Standard Filter/Gold/NVIDIA_STOCK_03.csv")
+        self._data_used = pan.read_csv(data_used)
+        self._x_value = pan.DataFrame(self._data_used[group])
+        self._model_obj = IsolationForest(contamination=0.1)
     
-    # propper group aliegnment to ensure that each group is initilized propperly
-    adj_close_csv.columns = ["Date","Adj Close", "Guess Adj Close"]
-    close_csv.columns = ["Date", "Close", "Guess Close"]
-    high_csv.columns = ["Date", "High", "Guess High"]
-    low_csv.columns = ["Date", "Low", "Guess Low"]
-    open_csv.columns = ["Date", "Open", "Guess Open"]
-    volume_csv.columns = ["Date", "Volume", "Guess Volume"]
 
-    # this will hold the starting values of the first merged set
-    final_file = pandas.merge(adj_close_csv, close_csv, on="Date", how="left")
-    # the remaing attributes that need to be merged with the previous merged set above in line 39
-    column_array = [high_csv, low_csv, open_csv, volume_csv]
+    """
+    This method is used to display the entire given dataset.
+    Args:
+        None
+    Returns:
+        return the content of the entire dataset
+    Raises:
+        Nothing
+    Implemented:
+        If written in another file:
+            import Isolation_Model.py as iso
 
-    # iterate through array of attributes to then merge to the variable holding the value of all the merge sets per iteration
-    for group in column_array:
-        final_file = pandas.merge(final_file, group, on="Date", how="left")
+            iso.IsolationModel(group).get_data_used()
 
-    # store merged values into a csv file called "OVERALL_PREDICTION.csv"
-    final_file.to_csv("Programmed/Predicted Data/OVERALL_PREDICTION.csv", index = False)
-
-
-"""
-The method displays the attributes of the given file.
-Args:
-    filepath = the path of where the file is stored
-Returns:
-    all the attributes that are in the csv
-Raises:
-    Nothing
-Implemented:
-    If written in another file:
-        import files_help_func.py as file
-
-        file.file_attributes()
-
-    If written in the same file the method was invokded:
-        file_attributes()
-"""
-def file_attributes(filepath):
-    return pandas.read_csv(filepath).columns
+        If written in the same file the method was invokded:
+            get_data_used()
+    """
+    def get_data_used(self):
+        return self._data_used
 
 
-"""
-This method displays all the records in the csv.
-Args:
-    filepath = the path of where the file is stored
-Returns:
-    all the records that are in the csv
-Raises:
-    Nothing
-Implemented:
-    If written in another file:
-        import files_help_func.py as file
+    """
+    This method displays all the values within a attribute
+    Args:
+        None
+    Returns:
+        returns all the values within a attribute
+    Raises:
+        Nothing
+    Implemented:
+        If written in another file:
+            import Isolation_Model.py as iso
 
-        file.file_records()
+            iso.IsolationModel(group).get_x_value()
 
-    If written in the same file the method was invokded:
-        file_records()
-"""
-def file_records(filepath):
-    return pandas.read_csv(filepath).values
+        If written in the same file the method was invokded:
+            get_x_value()
+    """
+    def get_x_value(self):
+        return self._x_value
+
+
+    """
+    This method modifies whcih attribute the object is looking at
+    Args:
+        single_group = the updated value of the attribute
+    Returns:
+        Nothing
+    Raises:
+        Nothing
+    Implemented:
+        If written in another file:
+            import Isolation_Model.py as iso
+
+            iso.IsolationModel(group).set_x_value(single_group)
+
+        If written in the same file the method was invokded:
+            set_x_value(single_group)
+    """
+    def set_x_value(self, single_group, all_groups):
+        # all_groups = self._data_used[["Adj Close","Close","High","Low","Open","Volume"]]
+        if single_group in all_groups:
+            self._x_value = self._data_used[[single_group]] 
+        else:
+            print(f"The column ({single_group}) does not exisit in the csv file.")
+
+
+    """
+    This method finds the anomalies that are within the dataset
+    Args:
+        Nothing
+    Returns:
+        returns the anmoly score that incidates if values are an anmoly or not
+    Raises:
+        Nothing
+    Implemented:
+        If written in another file:
+            import Isolation_Model.py as iso
+
+            iso.IsolationModel(group).anomaly_results()
+
+        If written in the same file the method was invokded:
+            anomaly_results()
+    """    
+
+    def set_data_used(self, new_file_path):
+        self._data_used = pan.read_csv(new_file_path)
+
+    def anomaly_results(self):
+        # self._x_value = series change to a dataframe
+        self._model_obj.fit(self._x_value) # method
+        anomaly_score = self._model_obj.decision_function(self._x_value) # method
+        return anomaly_score
+    
+
+    """
+    This method displays the outliers found in the dataset
+    Args:
+        Nothing
+    Returns:
+        returns the outliers of the dataset
+    Raises:
+        Nothing
+    Implemented:
+        If written in another file:
+            import Isolation_Model.py as iso
+
+            iso.IsolationModel(group).outlier_result()
+
+        If written in the same file the method was invokded:
+            outlier_result()
+    """
+    def outlier_result(self): 
+        threshold = pan.Series(IsolationModel.anomaly_results(self)).quantile(0.05) # method
+        outliers = self._data_used[IsolationModel.anomaly_results(self) < threshold][self._x_value.columns] # conclusion method
+        return outliers
+
+
+# def main():
+#     iso = IsolationModel("Adj Close")
+#     print(iso.outlier_result())
+#     iso.set_x_value("Close")
+#     print(iso.outlier_result())
+#     print(iso.outlier_result())
+#     print("done done")
+# main()
