@@ -1,7 +1,7 @@
 import matplotlib.pyplot
 import math_help_func as math
 import pandas
-import Programmed.plot_transfer as image
+import plot_transfer as image
 import matplotlib
 import tensorflow
 from PIL import Image
