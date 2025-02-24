@@ -4,8 +4,6 @@ import pandas
 import plot_transfer as image
 import matplotlib
 import tensorflow
-from PIL import Image
-import numpy
 
 class Conclusion:
     """
