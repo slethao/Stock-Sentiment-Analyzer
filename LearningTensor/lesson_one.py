@@ -55,37 +55,46 @@ x_train, x_test = x_train / 255.0, x_test / 255.0
 
 
 """
-@TODO: Step two: build neutral model (should create an output) 
+@TODO: Step two: build neural network model (should create an output) 
 
-explaination here and content *begin*
-logits/log-odds = un-normalized scores(raw scores) taht are produced by the final layer
-explaination here and content *end*
+After the MNIST dataset is loaded into the program, the programmer must
+build a neural network model that will be used to train the dataset to 
+come up with a metrics such as accuracy to see how effectively it can 
+classifies the handwritten digits given. In addition, the programmer will 
+also use loss function to determine how well the model is performing during 
+training which will later show patterns between pixels values in the 
+handwritten digits given.
 
-How its done:
-softmax(zi) = exp(zi) / sum(exp(zj)) for all j 
-where:
+Terminology used:
+  Flatten: This layer converts the 28x28 pixel images into a 1D array.
+  Dense: These are fully connected layers. The 'relu' activation function introduces non-linearity.
+  softmax: The final layer, which outputs probabilities for each digit (0-9).
+  logits/log-odds = un-normalized scores(raw scores) that are produced by the final layer
 
-zi is the logit for class i
-exp() is the exponential function (e^x)
+The formula for softmax:
+  softmax(zi) = exp(zi) / sum(exp(zj)) for all j 
+  Variables used:
+    zi is the logit for class i
+    exp() is the exponential function (e^x)
 
-example:
-This is the prediction: [[ 0.1383641   0.13797253 -0.02670263 -0.4118031  -0.143114    0.50748676
-  -0.14279084  0.14581402  0.4932806   0.4338226 ]]
-softmax= (math.pow(math.e, 0.1383641)/ ( math.pow(math.e, 0.1383641)  + 
-                                         math.pow(math.e, 0.13797253)  + 
-                                         math.pow(math.e, -0.02670263) + 
-                                         math.pow(math.e, -0.4118031) + 
-                                         math.pow(math.e, -0.143114) + 
-                                         math.pow(math.e, 0.50748676) +
-                                         math.pow(math.e, -0.14279084) + 
-                                         math.pow(math.e, 0.14581402)  + 
-                                         math.pow(math.e, 0.4932806) + 
-                                         math.pow(math.e, 0.4338226)))
-The anwser is 0.09844821550963065 which is equal to 0.09844822
-This is the entire probability: [[0.09844822 0.09840968 0.08346805 0.05679019 0.07429566 0.1424019
-                                  0.07431968 0.09918439 0.14039323 0.13228904]]
+  Example:
+      This is the prediction: [[ 0.1383641   0.13797253 -0.02670263 -0.4118031  -0.143114    0.50748676
+        -0.14279084  0.14581402  0.4932806   0.4338226 ]]
+      softmax= (math.pow(math.e, 0.1383641)/ ( math.pow(math.e, 0.1383641)  + 
+                                              math.pow(math.e, 0.13797253)  + 
+                                              math.pow(math.e, -0.02670263) + 
+                                              math.pow(math.e, -0.4118031) + 
+                                              math.pow(math.e, -0.143114) + 
+                                              math.pow(math.e, 0.50748676) +
+                                              math.pow(math.e, -0.14279084) + 
+                                              math.pow(math.e, 0.14581402)  + 
+                                              math.pow(math.e, 0.4932806) + 
+                                              math.pow(math.e, 0.4338226)))
+      The anwser is 0.09844821550963065 which is equal to 0.09844822
+      This is the entire probability: [[0.09844822 0.09840968 0.08346805 0.05679019 0.07429566 0.1424019
+                                        0.07431968 0.09918439 0.14039323 0.13228904]]
 
-NOTE This is the class probaility = softmax
+      NOTE This is the class probaility = softmax(logits)
 ****Programmed example of how its done is below****
 """
 model = tf_keras.src.engine.sequential.Sequential(
@@ -108,7 +117,7 @@ model.compile(optimizer = 'adam' ,
               metrics = ['accuracy'])
 
 """
-@TODO: Step three: train neutral model (should porduce an output)
+@TODO: Step three: train neural network model (should porduce an output)
 explaination here and content
 Output look something like this: (shows the perfomance of the moel)
 Epoch 1/5
