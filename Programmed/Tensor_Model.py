@@ -203,8 +203,8 @@ class TensorModel():
         scaler = StandardScaler() 
         features = scaler.fit_transform(features) 
         predict = train_model.predict(features)
-        predict_data_frame = pandas.DataFrame({ "Date": pandas.read_csv("Programmed/Standard Filter/Gold/NVIDIA_STOCK_03.csv")["Date"].values,
-                                                f"{self._group}": pandas.read_csv("Programmed/Standard Filter/Gold/NVIDIA_STOCK_03.csv")[f"{self._group}"].values,
+        predict_data_frame = pandas.DataFrame({ "Date": pandas.read_csv("Stock-Sentiment-Analyzer/Programmed/Standard Filter/Gold/NVIDIA_STOCK_03.csv")["Date"].values,
+                                                f"{self._group}": pandas.read_csv("Stock-Sentiment-Analyzer/Programmed/Standard Filter/Gold/NVIDIA_STOCK_03.csv")[f"{self._group}"].values,
                                                f"Guess {self._group}": predict.flatten()}) # add the data set here
         predict_data_frame.to_csv(file_path, index = False)
         return predict
