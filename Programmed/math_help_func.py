@@ -1,7 +1,7 @@
 import matplotlib.pyplot
 import pandas
 import tensorflow
-import Programmed.plot_transfer as img
+import plot_transfer as img
 
 """
 This method finds the median of a sorted dataset based on its index
