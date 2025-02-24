@@ -5,6 +5,8 @@ import spacy as sp
 import Isolation_Model as iso
 import pandas
 import Tensor_Model as ten
+import numpy
+import tensorflow
 
 def re_expression(line):
     edited = line
@@ -65,19 +67,46 @@ def filter_silver():
         group_two = word.formt_to_csv(encoded_02, file_path_four)
         # isolation forest
         spliting_tool = iso.IsolationModel("feature_1", file_path_three)
-        learning_model = ten.TensorModel("group", file_path_three)
+        sentence_anmol = []
+        token_anmol = []
         for group in group_one:
             given_df = pandas.DataFrame(group_one)
             spliting_tool.set_x_value(group, given_df.columns)
             anomaly_found = spliting_tool.anomaly_results()
+            sentence_anmol.append(anomaly_found)
             print(anomaly_found)
-        print("end of one csv")
+        final_sen = numpy.array(sentence_anmol)
+        sen_anm_df = pandas.DataFrame(final_sen, columns=["feature_0", "feature_1", "feature_2", "feature_4",
+                                      "feature_5"])
+        sen_anm_df.to_csv("Stock-Sentiment-Analyzer/Programmed/Predicted Data/SENTENCE_TOKEN_AMONOLIES.csv", index=False)
         spliting_tool.set_data_used(file_path_four)
         for group in group_two:
             given_df = pandas.DataFrame(group_two)
             spliting_tool.set_x_value(group, given_df.columns)
             anomaly_found = spliting_tool.anomaly_results()
-        print("end of the second csv")
+            token_anmol.append(anomaly_found)
+        final_tok = numpy.array(token_anmol)
+        tok_anm_df = pandas.DataFrame(final_tok, columns=["feature_0", "feature_1", "feature_2", "feature_4",
+                                                          "feature_5"])
+        
+        summary_writer = tensorflow.summary.create_file_writer("Programmed/logs")
+        with summary_writer.as_default():
+            for group in tok_anm_df.columns:
+                tok_anm_df_series = tok_anm_df[group]
+                for time_point, is_event in tok_anm_df_series.items():
+                    step = time_point
+                    tensorflow.summary.scalar(f"external_events/{group}", is_event, step=step) 
+
+                tensorflow.summary.histogram(f"external_events_histogram/{group}", tok_anm_df_series.values, step=0) 
+
+
+        tok_anm_df.to_csv("Stock-Sentiment-Analyzer/Programmed/Predicted Data/Token_TOKEN_AMONOLIES.csv", index=False)
+        learning_model_01 = ten.TensorModel(sen_anm_df.columns, "Stock-Sentiment-Analyzer/Programmed/Predicted Data/SENTENCE_TOKEN_AMONOLIES.csv")
+        learning_model_02 = ten.TensorModel(tok_anm_df.columns, "Stock-Sentiment-Analyzer/Programmed/Predicted Data/Token_TOKEN_AMONOLIES.csv")
+        # @TODO: build, compile and train then you are done!!
+        # build
+        learning_model_01.build_model_other()
+        learning_model_02.build_model_other()
 
 
 def main():

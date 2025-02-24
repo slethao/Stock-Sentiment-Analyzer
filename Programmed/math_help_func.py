@@ -263,7 +263,7 @@ def cal_vol_price_trend(close, vol_col):
     with writer.as_default():
         tensorflow.summary.image("matplotlib_plot_02", img.plot_to_image(fig), step=0)
     # csv
-    vpt_dataframe.to_csv("Programmed/Calculations/VPT_DATA.csv", index = False)
+    vpt_dataframe.to_csv("Stock-Sentiment-Analyzer/Programmed/Calculations/VPT_DATA.csv", index = False)
 
 
 """
@@ -326,7 +326,7 @@ def cal_on_balence_vol(close, vol_col):
     with writer.as_default():
         tensorflow.summary.image("matplotlib_plot_03", img.plot_to_image(fig), step=0)
     # put into a csv
-    obv_dataframe.to_csv("Programmed/Calculations/OBV_DATA.csv", index = False)
+    obv_dataframe.to_csv("Stock-Sentiment-Analyzer/Programmed/Calculations/OBV_DATA.csv", index = False)
 
 
 """

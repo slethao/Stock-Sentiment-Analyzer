@@ -89,7 +89,7 @@ class Conclusion:
         """
         low_stock_counter = 0
         all_ranges = []
-        file_path = "Programmed/Calculations/ALL_PRICE_RANGES.csv"
+        file_path = "Stock-Sentiment-Analyzer/Programmed/Calculations/ALL_PRICE_RANGES.csv"
         for stock in self._high_stock:
             all_ranges.append(stock - self._low_stock[low_stock_counter])
             low_stock_counter += 1
@@ -197,7 +197,7 @@ class Conclusion:
         with writer.as_default():
             tensorflow.summary.image("matplotlib_plot_04", image.plot_to_image(fig), step=0)
 
-        price_change_dataframe.to_csv("Programmed/Predicted Data/PREDICTED_PRICE_CHANGE.csv", index = False)
+        price_change_dataframe.to_csv("Stock-Sentiment-Analyzer/Programmed/Predicted Data/PREDICTED_PRICE_CHANGE.csv", index = False)
         
     """
     This method is used to calcualte the predicted price range.
@@ -228,7 +228,7 @@ class Conclusion:
             predicted_range = predict_high[index] - predict_low[index]
             all_predict_range.append(predicted_range)
         predict_range_dataframe = pandas.DataFrame({"predicted range": all_predict_range})
-        predict_range_dataframe.to_csv("Programmed/Predicted Data/PREDICTED_PRICE_RANGE.csv")
+        predict_range_dataframe.to_csv("Stock-Sentiment-Analyzer/Programmed/Predicted Data/PREDICTED_PRICE_RANGE.csv")
         matplotlib.pyplot.plot(pandas.read_csv(all_info)["Date"].values,all_predict_range)
         fig = matplotlib.pyplot.gcf()
         writer = tensorflow.summary.create_file_writer("Programmed/logs") # Create a writer 
@@ -269,7 +269,7 @@ class Conclusion:
         writer = tensorflow.summary.create_file_writer("Programmed/logs") # Create a writer 
         with writer.as_default():
             tensorflow.summary.image("matplotlib_plot_06", image.plot_to_image(fig), step=0)
-        predict_return_dataframe.to_csv("Programmed/Predicted Data/PREDICTED_DAILY_RETURN.csv", index = False)
+        predict_return_dataframe.to_csv("Stock-Sentiment-Analyzer/Programmed/Predicted Data/PREDICTED_DAILY_RETURN.csv", index = False)
 
 
     """
@@ -359,7 +359,7 @@ class Conclusion:
         writer = tensorflow.summary.create_file_writer("Programmed/logs") # Create a writer 
         with writer.as_default():
             tensorflow.summary.image("matplotlib_plot_08", image.plot_to_image(fig), step=0)
-        mse_data_frame.to_csv("Programmed/Calculations/MEAN_SQUARE_ERROR.csv")
+        mse_data_frame.to_csv("Stock-Sentiment-Analyzer/Programmed/Calculations/MEAN_SQUARE_ERROR.csv")
 
 
     """
@@ -391,7 +391,7 @@ class Conclusion:
             rmse = data**(1/2)
             all_rmse.append(rmse)
         rmse_data_frame = pandas.DataFrame({"Root Mean Squared Error": all_rmse})
-        rmse_data_frame.to_csv("Programmed/Calculations/ROOT_MEAN_SQUARED_ERROR.csv")
+        rmse_data_frame.to_csv("Stock-Sentiment-Analyzer/Programmed/Calculations/ROOT_MEAN_SQUARED_ERROR.csv")
 
 
     """

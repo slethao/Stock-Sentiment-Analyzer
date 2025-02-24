@@ -12,13 +12,13 @@ def main():
     # create six file variables to hold each prediction
     # display it on tensor board
     clean.main()
-    model_obj = tensor.TensorModel("Adj Close", "Programmed/Standard Filter/Gold/NVIDIA_STOCK_03.csv")
-    file_one = "Programmed/Predicted Data/NVIDIA_STOCK_PREDICT_AdjClose.csv"
-    file_two = "Programmed/Predicted Data/NVIDIA_STOCK_PREDICT_Close.csv"
-    file_three = "Programmed/Predicted Data/NVIDIA_STOCK_PREDICT_High.csv"
-    file_four = "Programmed/Predicted Data/NVIDIA_STOCK_PREDICT_Low.csv"
-    file_five = "Programmed/Predicted Data/NVIDIA_STOCK_PREDICT_Open.csv"
-    file_six = "Programmed/Predicted Data/NVIDIA_STOCK_PREDICT_Volume.csv"
+    model_obj = tensor.TensorModel("Adj Close", "Stock-Sentiment-Analyzer/Programmed/Standard Filter/Gold/NVIDIA_STOCK_03.csv")
+    file_one = "Stock-Sentiment-Analyzer/Programmed/Predicted Data/NVIDIA_STOCK_PREDICT_AdjClose.csv"
+    file_two = "Stock-Sentiment-Analyzer/Programmed/Predicted Data/NVIDIA_STOCK_PREDICT_Close.csv"
+    file_three = "Stock-Sentiment-Analyzer/Programmed/Predicted Data/NVIDIA_STOCK_PREDICT_High.csv"
+    file_four = "Stock-Sentiment-Analyzer/Programmed/Predicted Data/NVIDIA_STOCK_PREDICT_Low.csv"
+    file_five = "Stock-Sentiment-Analyzer/Programmed/Predicted Data/NVIDIA_STOCK_PREDICT_Open.csv"
+    file_six = "Stock-Sentiment-Analyzer/Programmed/Predicted Data/NVIDIA_STOCK_PREDICT_Volume.csv"
     all_files = [file_one, file_two, file_three, file_four, file_five, file_six]
     all_attributes = ["Adj Close","Close","High","Low","Open","Volume"]
     file_counter = 0
@@ -44,8 +44,8 @@ def main():
         # build
         model_obj.build_model()
         # train
-        tb_cb = tensorflow.keras.callbacks.TensorBoard(log_dir=f"Programmed/logs/my_model{file_counter}")
-        trained = model_obj.train_model("Programmed/Standard Filter/Gold/NVIDIA_STOCK_03.csv")
+        tb_cb = tensorflow.keras.callbacks.TensorBoard(log_dir=f"Stock-Sentiment-Analyzer/Programmed/logs/my_model{file_counter}")
+        trained = model_obj.train_model("Stock-Sentiment-Analyzer/Programmed/Standard Filter/Gold/NVIDIA_STOCK_03.csv")
         # evaluate
         model_obj.evaluate_model(trained, tb_cb) # train model parameter needed
         # predict
@@ -56,7 +56,7 @@ def main():
     file.combining_files()
 
     # then calculate the results in the Conclusion class
-    data_stored = "Programmed/Predicted Data/OVERALL_PREDICTION.csv"
+    data_stored = "Stock-Sentiment-Analyzer/Programmed/Predicted Data/OVERALL_PREDICTION.csv"
     outcome = conclude.Conclusion(data_stored)
     
     outcome.price_change() # uncomment later (create a chart to put on tensor board)
@@ -66,21 +66,21 @@ def main():
     outcome.price_cal_with_predict(data_stored)
     outcome.range_cal_with_predict(data_stored)
     outcome.daily_return_with_predict(data_stored)
-    outcome.daily_mov_with_predict("Programmed/Predicted Data/PREDICTED_PRICE_CHANGE.csv")
+    outcome.daily_mov_with_predict("Stock-Sentiment-Analyzer/Programmed/Predicted Data/PREDICTED_PRICE_CHANGE.csv")
     outcome.cal_mse(data_stored)
-    outcome.cal_rmse("Programmed/Calculations/MEAN_SQUARE_ERROR.csv")
+    outcome.cal_rmse("Stock-Sentiment-Analyzer/Programmed/Calculations/MEAN_SQUARE_ERROR.csv")
     outcome.cal_r_square(data_stored, "Close")
     outcome.cal_r_square(data_stored, "Adj Close")
     plan_obj = plan.Strategies(data_stored)
     plan_obj.recomendation()
 
     # polarity on the results 
-    polar_obj = polar.Polarity("Programmed/Predicted Data/PREDICTED_PRICE_CHANGE.csv",
-                               "Programmed/Predicted Data/PREDICTED_DAILY_RETURN.csv", 
-                               "Programmed/Predicted Data/PREDICTED_PRICE_RANGE.csv") # price change, daily return, mov dir
+    polar_obj = polar.Polarity("Stock-Sentiment-Analyzer/Programmed/Predicted Data/PREDICTED_PRICE_CHANGE.csv",
+                               "Stock-Sentiment-Analyzer/Programmed/Predicted Data/PREDICTED_DAILY_RETURN.csv", 
+                               "Stock-Sentiment-Analyzer/Programmed/Predicted Data/PREDICTED_PRICE_RANGE.csv") # price change, daily return, mov dir
     polar_obj.sentiment_results() # graph!!!!
     polar_obj.predict_news_events() # works
-    # # polar_obj.predict_volume()
+    # polar_obj.predict_volume()
 
     # store into a database (pending)
     db.main()

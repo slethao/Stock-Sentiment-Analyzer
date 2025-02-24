@@ -20,12 +20,12 @@ Implementated:
 """
 def combining_files(): 
     # all the predicted data for ecah attribute in the orginal csv. (NVIDIA_STOCK.csv)
-    adj_close_csv = pandas.read_csv("Programmed/Predicted Data/NVIDIA_STOCK_PREDICT_AdjClose.csv")
-    close_csv = pandas.read_csv("Programmed/Predicted Data/NVIDIA_STOCK_PREDICT_Close.csv")
-    high_csv = pandas.read_csv("Programmed/Predicted Data/NVIDIA_STOCK_PREDICT_High.csv")
-    low_csv = pandas.read_csv("Programmed/Predicted Data/NVIDIA_STOCK_PREDICT_Low.csv")
-    open_csv = pandas.read_csv("Programmed/Predicted Data/NVIDIA_STOCK_PREDICT_Open.csv")
-    volume_csv = pandas.read_csv("Programmed/Predicted Data/NVIDIA_STOCK_PREDICT_Volume.csv")
+    adj_close_csv = pandas.read_csv("Stock-Sentiment-Analyzer/Programmed/Predicted Data/NVIDIA_STOCK_PREDICT_AdjClose.csv")
+    close_csv = pandas.read_csv("Stock-Sentiment-Analyzer/Programmed/Predicted Data/NVIDIA_STOCK_PREDICT_Close.csv")
+    high_csv = pandas.read_csv("Stock-Sentiment-Analyzer/Programmed/Predicted Data/NVIDIA_STOCK_PREDICT_High.csv")
+    low_csv = pandas.read_csv("Stock-Sentiment-Analyzer/Programmed/Predicted Data/NVIDIA_STOCK_PREDICT_Low.csv")
+    open_csv = pandas.read_csv("Stock-Sentiment-Analyzer/Programmed/Predicted Data/NVIDIA_STOCK_PREDICT_Open.csv")
+    volume_csv = pandas.read_csv("Stock-Sentiment-Analyzer/Programmed/Predicted Data/NVIDIA_STOCK_PREDICT_Volume.csv")
     
     # propper group aliegnment to ensure that each group is initilized propperly
     adj_close_csv.columns = ["Date","Adj Close", "Guess Adj Close"]
@@ -45,7 +45,7 @@ def combining_files():
         final_file = pandas.merge(final_file, group, on="Date", how="left")
 
     # store merged values into a csv file called "OVERALL_PREDICTION.csv"
-    final_file.to_csv("Programmed/Predicted Data/OVERALL_PREDICTION.csv", index = False)
+    final_file.to_csv("Stock-Sentiment-Analyzer/Programmed/Predicted Data/OVERALL_PREDICTION.csv", index = False)
 
 
 """

@@ -14,10 +14,10 @@ def put_into_db(csv_folder):
     connection.close()
 
 def main():
-    csv_dir_cal = "Programmed/Calculations"
-    csv_dir_predict_data = "Programmed/Predicted Data"
-    csv_dir_rss_feed = "Programmed/RSS Feeder"
-    csv_dir_stand_filter = "Programmed/Standard Filter"
+    csv_dir_cal = "Stock-Sentiment-Analyzer/Programmed/Calculations"
+    csv_dir_predict_data = "Stock-Sentiment-Analyzer/Programmed/Predicted Data"
+    csv_dir_rss_feed = "Stock-Sentiment-Analyzer/Programmed/RSS Feeder"
+    csv_dir_stand_filter = "Stock-Sentiment-Analyzer/Programmed/Standard Filter"
     put_into_db(csv_dir_cal)
     put_into_db(csv_dir_predict_data)
     put_into_db(csv_dir_rss_feed)
