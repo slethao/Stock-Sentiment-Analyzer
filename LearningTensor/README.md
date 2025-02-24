@@ -37,15 +37,15 @@
 This part of the reposity is my testing and experimenting with the documation examples and finding out what works, so you don't have to!
 | Lessons | Description|
 | --- | --- |
-| <span style="color:#7DC8CA">lesson_one.py</span> | This file will allow the programmer to see the steps of how the machine learning model will be built and executed in a non-object oriented way. |
-| <span style="color:#7DC8CA">lesson_two.py</span> | This file shows is an extension of <code>lesson_one.py</code> that will show the programmer how to use an optimizer in their machine learning model along with using the decorator <code>@tensorflow.function</code> |
-| <span style="color:#7DC8CA">lesson_three.py</span> | This file will show you how to build and execute and machine learning model through a class and includes how to create a personalized training method for the model. |
-| <span style="color:#7DC8CA">lesson_four.py</span> | something |
-| <span style="color:#7DC8CA">lesson_five.py</span> | something |
-| <span style="color:#7DC8CA">lesson_six.py</span> | something |
-| <span style="color:#7DC8CA">lesson_seven.py</span> | something |
-| <span style="color:#7DC8CA">lesson_eight.py</span> | something |
-| <span style="color:#7DC8CA">lesson_nine.py</span> | something |
+| <span style="color:#7DC8CA">lesson_one.py</span> | An overview of how TensorFlow models work and the purpose behind it. |
+| <span style="color:#7DC8CA">lesson_two.py</span> | A quick lesson to know how to load and prcoess data from flat files such as .txt, .csv, and more |
+| <span style="color:#7DC8CA">lesson_three.py</span> | A lesson on how to do basic image and text classifcation in TensorFlow. |
+| <span style="color:#7DC8CA">lesson_four.py</span> | This will cover the concept of regression that is a reoccuring theme in tensor flow that is use for prediction of values to evalute relationships between them. In addition to different sorts of regressions may come accross. |
+| <span style="color:#7DC8CA">lesson_five.py</span> | This lesson will take baout the concept of overfit and underfit and how these conepts are seen in the TensorFlow model. In addition, to learning how to use hpyerparameters within your TensorFlow model to find a happy-median between overfit and underfit. |
+| <span style="color:#7DC8CA">lesson_six.py</span> | This lesson will cover layers taht can be used in the neurtal netowrks that can be used in the TensroFlow model to reduce loss of data and validation of data.|
+| <span style="color:#7DC8CA">lesson_seven.py</span> | A breif explaination on how to create a customer traingin for your model to customize the efficeny of for your TensorFlow model. |
+| <span style="color:#7DC8CA">lesson_eight.py</span> | A breif lesson to learn how to use optimizers to  |
+| <span style="color:#7DC8CA">lesson_nine.py</span> | A crashcourse lesson on how to use Tensorboard to display results from created models. |
 <blockquote style="border-left: 5px solid #7DC8CA; padding-left: 10px;">
 
 <h2><span style="color:#CAE9E0">★ Special Note For Viewers</span></h2>
