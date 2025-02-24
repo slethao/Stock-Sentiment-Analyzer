@@ -116,9 +116,11 @@ model.compile(optimizer = 'adam' ,
               loss=losses_found,
               metrics = ['accuracy'])
 
+
 """
 @TODO: Step three: train neural network model (should porduce an output)
 explaination here and content
+
 Output look something like this: (shows the perfomance of the moel)
 Epoch 1/5
 1875/1875 [==============================] - 1s 578us/step - loss: 0.3011 - accuracy: 0.9126
@@ -130,7 +132,6 @@ Epoch 4/5
 1875/1875 [==============================] - 1s 552us/step - loss: 0.0887 - accuracy: 0.9729
 Epoch 5/5
 1875/1875 [==============================] - 1s 563us/step - loss: 0.0756 - accuracy: 0.9764
-
 
 NOTE epochs = rounds of cases made
 ****Programmed example of how its done is below****
