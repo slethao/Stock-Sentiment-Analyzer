@@ -20,8 +20,8 @@ def re_expression(line):
     return edited
 
 def filter_bronze():
-    file_path_one = "Programmed/RSS Feeder/Bronze/Event.csv"
-    file_path_two = "Programmed/RSS Feeder/Silver/Event.csv"
+    file_path_one = "Stock-Sentiment-Analyzer/Programmed/RSS Feeder/Bronze/Event.csv"
+    file_path_two = "Stock-Sentiment-Analyzer/Programmed/RSS Feeder/Silver/Event.csv"
 
     with open(file_path_one, "r") as raw_data:
         extra_line = 'All rights reserved. For personal use only'
@@ -38,9 +38,9 @@ def filter_bronze():
                 scribe.writerow(re_expression(line).lower().split("\n"))
 
 def filter_silver():
-    file_path_two = "Programmed/RSS Feeder/Silver/Event.csv"
-    file_path_three = "Programmed/RSS Feeder/Gold/Event_Final.csv"
-    file_path_four = "Programmed/RSS Feeder/Gold/Event_Final_02.csv"
+    file_path_two = "Stock-Sentiment-Analyzer/Programmed/RSS Feeder/Silver/Event.csv"
+    file_path_three = "Stock-Sentiment-Analyzer/Programmed/RSS Feeder/Gold/Event_Final.csv"
+    file_path_four = "Stock-Sentiment-Analyzer/Programmed/RSS Feeder/Gold/Event_Final_02.csv"
     edited_tokens = []
     all_pre_reocrds = []
     model = sp.load("en_core_web_sm")
@@ -83,5 +83,3 @@ def filter_silver():
 def main():
     filter_bronze()
     filter_silver()
-
-main()
