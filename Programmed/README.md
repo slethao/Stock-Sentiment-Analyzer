@@ -80,7 +80,8 @@ This project is licensed under the GNU General Public License v3.0 - see the [LI
 
 <blockquote style="border-left: 5px solid #FFB4A2; padding-left: 10px;">
 <h2><span style="color:#FFB4A2">Contact Information</span></h2> 
-<p>thaosle4@gmail.com</p>
+<p>Email: <a href="mailto:thaosle4@gmail.com">the link</a></p>
+<p>LinkIn (Preferred): <a href="http://linkedin.com/in/sommer-le-474100347">the link</a></p>
 </blockquote>
 
 <blockquote style="border-left: 5px solid #FFB4A2; padding-left: 10px;">

@@ -50,19 +50,34 @@ The results that are found will be stored into a database and displayed on Tenso
         <code>pip3 install csv</code><br>
         <code>pip3 install request</code><br>
         <code>pip3 install scikit-learn</code><br>
+        <code>pip3 install re</code><br>
+        <code>pip3 install spacy</code><br>
+        <code>pip3 install os</code><br>
+        <code>pip3 install feedparser</code><br>
+        <code>pip3 install matplotlib</code><br>
+        <code>pip3 install sqlite3</code><br>
         </ol>
         For Windows:<ol><code>pip install tensorflow</code><br>
-        <code>pip install pandas<br></code>
+        <code>pip install tensorflow</code><br>
+        <code>pip isntall pandas</code><br>
         <code>pip install numpy</code><br>
-        <code>pip install csv<br></code>
-        <code>pip install request<br></code>
-        <code>pip install scikit-learn</code>
-        Kaggle API Setup:
-        <li><h4><span style="color:#E5989B">Create your own Kaggle API token by going to your Kaggle account settings.</span><br>
-        1.  Download the <code>kaggle.json</code> file. <br>
-        2.  Place the <code>kaggle.json</code> file in the <code>~/.kaggle/</code> directory (create the directory if it doesn't exist).
-        OR<br>
-        Set the <code>KAGGLE_USERNAME</code> and <code>KAGGLE_KEY</code> environment variables.
+        <code>pip install csv</code><br>
+        <code>pip install request</code><br>
+        <code>pip install scikit-learn</code><br>
+        <code>pip install re</code><br>
+        <code>pip install spacy</code><br>
+        <code>pip install os</code><br>
+        <code>pip install feedparser</code><br>
+        <code>pip install matplotlib</code><br>
+        <code>pip install sqlite3</code><br>
+        <li><h4><span style="color:#E5989B">Kaggle API Setup: Create a Kaggle API token through your Kaggle Account</span></li></h4>
+        <ol>
+        1. Download the <code>kaggle.json</code> file.<br>
+        2. Place the <code>kaggle.json</code> file in the <code>~/.kaggle/</code> directory (create the directory if it doesn't exist)
+        OR set the <code>KAGGLE_USERNAME</code> and <code>KAGGLE_KEY</code> environment variables.<br>
+        <p><span style="color:#E5989B">Kaggle API Token Documentation: </span><a href="https://github.com/Kaggle/kaggle-api">the link</a></p>
+        </ol>
+    </ol>
 </h4></li>
 </blockquote>
 
@@ -112,7 +127,9 @@ This project is licensed under the GNU General Public License v3.0 - see the [LI
 
 <blockquote style="border-left: 5px solid #FFB4A2; padding-left: 10px;">
 <h2><span style="color:#FFB4A2">Contact Information</span></h2> 
-<p>thaosle4@gmail.com</p>
+<p>Email: <a href="mailto:thaosle4@gmail.com">the link</a></p>
+<p>LinkIn (Preferred): <a href="http://linkedin.com/in/sommer-le-474100347">the link</a></p>
+
 </blockquote>
 
 <blockquote style="border-left: 5px solid #FFB4A2; padding-left: 10px;">
