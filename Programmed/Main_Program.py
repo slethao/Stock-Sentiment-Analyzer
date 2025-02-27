@@ -7,11 +7,15 @@ import cleaning_data as clean
 import Database as db
 import filter_rss as rss
 import tensorflow
+import time
 
 def main():
     # create six file variables to hold each prediction
     # display it on tensor board
+    # start_time = time.time()
     clean.main()
+    #end_time = time.time()
+    #print(f"Data processing time: {end_time - start_time} seconds") # 0.37647414207458496 seconds
     model_obj = tensor.TensorModel("Adj Close", "Stock-Sentiment-Analyzer/Programmed/Standard Filter/Gold/NVIDIA_STOCK_03.csv")
     file_one = "Stock-Sentiment-Analyzer/Programmed/Predicted Data/NVIDIA_STOCK_PREDICT_AdjClose.csv"
     file_two = "Stock-Sentiment-Analyzer/Programmed/Predicted Data/NVIDIA_STOCK_PREDICT_Close.csv"
@@ -37,21 +41,26 @@ def main():
         -> evaluation_loss_vs_iterations 
         -> matplotlib plot   
     """
-
+    #start_time = time.time()
     for attribute in all_attributes:
         # then use the setter
         model_obj.set_group(attribute)
         # build
         model_obj.build_model()
+        #start_time = time.time()
         # train
         tb_cb = tensorflow.keras.callbacks.TensorBoard(log_dir=f"Stock-Sentiment-Analyzer/Programmed/logs/my_model{file_counter}")
         trained = model_obj.train_model("Stock-Sentiment-Analyzer/Programmed/Standard Filter/Gold/NVIDIA_STOCK_03.csv")
-        # evaluate
+        # evaluate=
         model_obj.evaluate_model(trained, tb_cb) # train model parameter needed
         # predict
         # model_obj.predict_model(trained, all_files[file_counter], tb_cb) # train model and fiel path parameter needed
         model_obj.predict_model(trained, all_files[file_counter]) # train model and fiel path parameter needed
+        #end_time = time.time()
+        #print(f"Data processing time: {end_time - start_time} seconds +++++++++++++++++++++++") # 2.8628978729248047 seconds, 2.653456211090088 seconds, 4.68937611579895 seconds, 3.7976200580596924 seconds, 2.6423001289367676 seconds, 4.2533440589904785 seconds,
         file_counter += 1
+    #end_time = time.time()
+    #print(f"Data processing time: {end_time - start_time} seconds") # 21.655421018600464 seconds
     # use the file library to merge the all files
     file.combining_files()
 

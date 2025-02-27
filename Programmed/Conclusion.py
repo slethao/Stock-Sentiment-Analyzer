@@ -431,6 +431,7 @@ class Conclusion:
             total_sse += sse
             total_tss += tss
         r_squt = 1 - (total_sse/total_tss)
+        print(r_squt, "THIS IS THE R S-QQUARED VALUE")
         if r_squt == 0: # horizontal line that does not show upward or downward trend
             no_activity += 1
         if r_squt == 1: # can predict upward or downward trend

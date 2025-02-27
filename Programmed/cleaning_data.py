@@ -84,6 +84,8 @@ def outliers_removed(group, file_path):
             quarter_three = (ordered_data[index_median+quart_one] + ordered_data[index_median+quart_one+1])/2
             low_bound = math.low_inter_quart_range(quarter_one, quarter_three,  ordered_data[0])
             high_bound = math.high_inter_quart_range(quarter_one, quarter_three, ordered_data[len(ordered_data)-1])
+        # print("low bound", low_bound)
+        # print("high bound", high_bound)
         return [x for x in all_data if low_bound <= x <= high_bound]
 
 
