@@ -35,7 +35,7 @@ price and yesterday's price. The data will ran through a
 polarity class which will conclude the results: negative, 
 postive or netural.
 ## <span style="color:#FFB4A2"> Display Results
-The results that are found will be stored into a database and displayed on TensorBoard to show graphical data and how the data will be compared with today's current events.
+The results that are found will be stored into a database and displayed on TensorBoard to show graphical data and how the data will be compared with today's current events. The entire program will be executed in the <code>Main_Program.py</code>. After the execution of the program type <code> tensorboard --logdir Programmed/logs/</code> in the terminal of the IDE that is currently being used to execute the TensorBoard to display results.
 <blockquote style="border-left: 5px solid #FFB4A2; padding-left: 10px;">
     <h2><span style="color:#FFB4A2">Installation</span></h2>
     <p><h5><span style="color:#B5838D">To install the Stock Sentiment Analyzer, follow these steps:</span></h5></p>
