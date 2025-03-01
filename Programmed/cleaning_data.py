@@ -81,6 +81,7 @@ def outliers_removed(group, file_path):
             index_median = math.median_of_dataset(ordered_data)
             quart_one = index_median//2
             quarter_one = (ordered_data[quart_one] + ordered_data[quart_one+1])/2
+            print(quarter_one)
             quarter_three = (ordered_data[index_median+quart_one] + ordered_data[index_median+quart_one+1])/2
             low_bound = math.low_inter_quart_range(quarter_one, quarter_three,  ordered_data[0])
             high_bound = math.high_inter_quart_range(quarter_one, quarter_three, ordered_data[len(ordered_data)-1])

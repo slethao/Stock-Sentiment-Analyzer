@@ -93,10 +93,7 @@ def main():
 
     # store into a database (pending)
     db.main()
-    print("the end, yay")
     rss.main()
-    #@TODO tensrobaord here
-    print("the end, yay two")
 
     # # include unit test pytest
 
