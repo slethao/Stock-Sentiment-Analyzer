@@ -18,12 +18,11 @@ group made, and afterward each results made from each group in put into a csv. f
 <br><span style="color:orange">*Profile Who Provided The Dataset:*
 [Link Here](https://www.kaggle.com/muhammaddawood42)</span></br>
 ## <span style="color:#FFB4A2"> Data Modeling
-The filtered data is then loaded into a TensorFlow model which is then built to fit standard scaler and the data is compiled to be trained to learn how to evualte data. Then it creates a prediction on the learned data to comput up with postive or negative results based on how well it was trained.
+The filtered data is then loaded into a TensorFlow model which is then built to fit standard scaler and the data is compiled to be trained to learn how to evualte data. Then it creates a prediction on the learned data to comput up with postive or negative results based on how well it was trained. The predicted data is then loaded and stored into the csv file along with the previous data that was loaded into the TensorFlow model.
 | Type of Results | Description |
 | --- | --- |
 | <span style="color:orange"> Negative value | Prediction made is lower value than the baseline value|
 | <span style="color:orange"> Positive Value | Prediction made is higher value than the baseline value |
-The predicted data is then loaded and stored into the csv file along with the previous data that was loaded into the TensorFlow model.
 ## <span style="color:#FFB4A2"> Sentiment Analysis
 The predicted results from the TensorFlow model and the 
 results from the Isolation Forest Model. The data is used 
