@@ -84,18 +84,6 @@ The results that are found will be stored into a database and displayed on Tenso
 To run the entire:
 ```python Main_Program.py ```
 
-<blockquote style="border-left: 5px solid #FFB4A2; padding-left: 10px;">
-    <h2><span style="color:#FFB4A2">Important Formulas Used</span></h2>
-    <ol>
-        <span style="color:#E5989B">Daily Return</span><br>The percentage change in the value of an investment over a single day. It's calculated using the daily closing prices of the investment.<br>
-        <span style="color:#E5989B">Volume-Price Trend (VPT)</span><br>A formula used to help understand the strength of a price trend by considering the volume associated with those price movements by seeing the relationship between price and volume.<br>
-        <span style="color:#E5989B">On-Balance Volume (OBV)
-        </span><br>A formula that is used to predict price changes base on volume trends.<br>
-        <span style="color:#E5989B">Sum of Squared Errors(SSE)</span><br>Used to create a model to predict today's and yesterday's closing price values.<br>
-        <span style="color:#E5989B">Total Sum of Squares(TSS)</span><br>This formula measures the total amount of variability in a dataset that shows the mean of all the data points in the stocks.<br>
-    </ol>
-</blockquote>
-
 ## <span style="color:#FFB4A2">Formulas Used
 
 $$\text{Daily Return} = \frac{\text{Today's Closing Price} - \text{Yesterday's Closing Price}}{\text{Yesterday's Closing Price}}$$
