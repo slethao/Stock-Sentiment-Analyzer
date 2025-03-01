@@ -357,7 +357,7 @@ class Conclusion:
         writer = tensorflow.summary.create_file_writer("Programmed/logs") # Create a writer 
         with writer.as_default():
             tensorflow.summary.image("matplotlib_plot_08", image.plot_to_image(fig), step=0)
-        mse_data_frame.to_csv("Stock-Sentiment-Analyzer/Programmed/Calculations/MEAN_SQUARE_ERROR.csv")
+        mse_data_frame.to_csv("Stock-Sentiment-Analyzer/Programmed/Calculations/MEAN_SQUARE_ERROR.csv", index = False)
 
 
     """
@@ -389,7 +389,7 @@ class Conclusion:
             rmse = data**(1/2)
             all_rmse.append(rmse)
         rmse_data_frame = pandas.DataFrame({"Root Mean Squared Error": all_rmse})
-        rmse_data_frame.to_csv("Stock-Sentiment-Analyzer/Programmed/Calculations/ROOT_MEAN_SQUARED_ERROR.csv")
+        rmse_data_frame.to_csv("Stock-Sentiment-Analyzer/Programmed/Calculations/ROOT_MEAN_SQUARED_ERROR.csv", index = False)
 
 
     """
