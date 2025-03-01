@@ -84,24 +84,6 @@ The results that are found will be stored into a database and displayed on Tenso
 To run the entire:
 ```python Main_Program.py ```
 
-## <span style="color:#FFB4A2">Formulas Used
-
-$$\text{Daily Return} = \frac{\text{Today's Closing Price} - \text{Yesterday's Closing Price}}{\text{Yesterday's Closing Price}}$$
-
-$$\text{Volume-Price Trend (VPT)}=\text{VPT Yesterday} + \text{(Volume Today} \times \frac{\text{(Today's Close - Yesterday's Close)}}{\text{Yesterday's Close}} $$
-
-$$\text{Three Formulas for On-Balance Volume (OBV)}:\\\text{Today's Close > Yesterday's Close}:
-\quad{\text{Today = Yesterday + Volume}}
-\\\text{Today's Close < Yesterday's Close}:
-\quad{\text{Today = Yesterday - Volume}}
-\\\text{Today's Close = Yesterday's Close}:
-\quad{\text{Today = Yesterday}}$$
-
-$$\text{Mean Squared Error (MSE)}=\frac{\text{1}}{\text{n}}\times\sum{(\text{Actual}-\text{Predicted})^2}$$
-
-$$\text{Root Mean Squared Error (RMSE)}=\sqrt{MSE}$$
-
-
 ## <span style="color:#FFB4A2">License
 
 This project is licensed under the GNU General Public License v3.0 - see the [LICENSE](LICENSE) file for details.
