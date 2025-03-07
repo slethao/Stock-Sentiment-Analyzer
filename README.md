@@ -82,7 +82,7 @@ The results that are found will be stored into a database and displayed on Tenso
 
 ## <span style="color:#FFB4A2">Usage
 To run the entire:
-```python Main_Program.py ```
+```python Programmed/Main_Program.py ```
 
 ## <span style="color:#FFB4A2">License
 
